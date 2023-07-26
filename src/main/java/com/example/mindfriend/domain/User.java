@@ -32,6 +32,9 @@ public class User extends BaseEntity {
     @Column(name = "userEmail")
     private String userEmail;
 
+    @Column(name = "userProfileImg")
+    private String userProgileImg;
+
     @OneToMany(mappedBy = "user")
     private List<Diary> DiaryList = new ArrayList<>();
 }
