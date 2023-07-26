@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -29,4 +31,7 @@ public class User extends BaseEntity {
 
     @Column(name = "userEmail")
     private String userEmail;
+
+    @OneToMany(mappedBy = "user")
+    private List<Diary> DiaryList = new ArrayList<>();
 }
