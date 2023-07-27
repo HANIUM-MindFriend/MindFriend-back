@@ -5,6 +5,7 @@ import com.example.mindfriend.domain.Diary;
 import com.example.mindfriend.domain.User;
 import com.example.mindfriend.dto.request.postDiary;
 import com.example.mindfriend.dto.response.getDiary;
+import com.example.mindfriend.dto.response.getDiaryDetail;
 import com.example.mindfriend.repository.DiaryRepository;
 import com.example.mindfriend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -42,5 +43,12 @@ public class DiaryService {
 
         Diary response = diaryRepository.save(diary);
         return getDiary.of(response);
+    }
+
+    // 일기 단건 조회
+    public getDiaryDetail getDiaryDetail(long diaryId) {
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(() -> new MindFriendBusinessException(DIARY_NOT_FOUND));
+        return getDiaryDetail.of(diary);
     }
 }

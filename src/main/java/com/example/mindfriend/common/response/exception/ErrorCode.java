@@ -23,7 +23,8 @@ public enum ErrorCode {
 
     // Diary
     EMPTY_TITLE(400, "D001", "제목 입력은 필수입니다."),
-    EMPTY_CONTENT(400, "D002", "내용을 입력은 필수입니다.");
+    EMPTY_CONTENT(400, "D002", "내용을 입력은 필수입니다."),
+    DIARY_NOT_FOUND(404, "D003", "존재 하지 않는 다이어리입니다.");
 
     private final int status;
     private final String code;
