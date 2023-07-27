@@ -1,6 +1,8 @@
 package com.example.mindfriend.domain;
 
 import com.example.mindfriend.common.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
@@ -29,9 +31,17 @@ public class Diary extends BaseEntity {
     @Column(name = "image")
     private String image;
 
+    @JsonIgnore
     @JoinColumn(name = "userId")
     @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
+
+    @Builder
+    public Diary(User user, String title, String content, String image) {
+        this.user = user;
+        this.title = title;
+        this.content = content;
+        this.image = image;
+    }
 
 }

@@ -26,5 +26,9 @@ spring:
     h2:
       console:
 
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
 
 

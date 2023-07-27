@@ -19,7 +19,11 @@ public enum ErrorCode {
     FILTER_MUST_RESPOND(500, "G010", "필터에서 처리해야 할 요청이 Controller에 접근하였습니다."),
 
     // User
-    USER_NOT_FOUND(404, "U001", "존재 하지 않는 사용자입니다.");
+    USER_NOT_FOUND(404, "U001", "존재 하지 않는 사용자입니다."),
+
+    // Diary
+    DIARY_NOT_FOUND(404, "D003", "존재 하지 않는 다이어리입니다."),
+    POST_DIARY_FAIL(400, "D004", "다이어리 작성에 실패했습니다.");
 
     private final int status;
     private final String code;
