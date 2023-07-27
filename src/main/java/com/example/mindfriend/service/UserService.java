@@ -1,6 +1,8 @@
 package com.example.mindfriend.service;
 
+import com.example.mindfriend.common.response.exception.UserNotFoundException;
 import com.example.mindfriend.domain.User;
+import com.example.mindfriend.dto.response.getUser;
 import com.example.mindfriend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,7 +16,8 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
 
-    public Optional<User> getUser(long userId) {
-        return userRepository.findById(userId);
+    public getUser getUser(long userId) {
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        return getUser.of(user);
     }
 }
