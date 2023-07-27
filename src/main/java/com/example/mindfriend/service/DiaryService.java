@@ -1,6 +1,7 @@
 package com.example.mindfriend.service;
 
 import com.example.mindfriend.common.response.exception.MindFriendBusinessException;
+import com.example.mindfriend.common.response.exception.UserNotFoundException;
 import com.example.mindfriend.domain.Diary;
 import com.example.mindfriend.domain.User;
 import com.example.mindfriend.dto.request.postDiary;
@@ -11,6 +12,7 @@ import com.example.mindfriend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import static com.example.mindfriend.common.response.exception.ErrorCode.*;
 
@@ -25,15 +27,9 @@ public class DiaryService {
     @Transactional
     public getDiary postDiary(Long userId, postDiary request) {
 
-        if(request.getTitle() == null) {
-            throw new MindFriendBusinessException(EMPTY_TITLE);
-        }
+        User user = userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
 
-        if(request.getContent() == null) {
-            throw new MindFriendBusinessException(EMPTY_CONTENT);
-        }
-
-        User user = userRepository.getOne(userId);
         Diary diary = Diary.builder()
                 .user(user)
                 .title(request.getTitle())
@@ -42,6 +38,9 @@ public class DiaryService {
                 .build();
 
         Diary response = diaryRepository.save(diary);
+        if (response == null) {
+            throw new MindFriendBusinessException(POST_DIARY_FAIL);
+        }
         return getDiary.of(response);
     }
 

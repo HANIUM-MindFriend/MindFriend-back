@@ -1,8 +1,6 @@
 package com.example.mindfriend.controller;
 
-import com.example.mindfriend.common.response.result.ResultCode;
 import com.example.mindfriend.common.response.result.ResultResponse;
-import com.example.mindfriend.domain.User;
 import com.example.mindfriend.dto.response.getUser;
 import com.example.mindfriend.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
 
 import static com.example.mindfriend.common.response.result.ResultCode.GET_USER_SUCCESS;
 
