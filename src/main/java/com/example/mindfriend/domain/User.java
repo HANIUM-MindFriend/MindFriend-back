@@ -35,6 +35,6 @@ public class User extends BaseEntity {
     @Column(name = "userProfileImg")
     private String userProfileImg;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Diary> DiaryList = new ArrayList<>();
 }
