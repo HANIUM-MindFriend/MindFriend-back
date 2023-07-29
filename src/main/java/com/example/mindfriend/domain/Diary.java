@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
 public class Diary extends BaseEntity {
 
@@ -30,6 +30,9 @@ public class Diary extends BaseEntity {
 
     @Column(name = "image")
     private String image;
+
+    @Column(name = "emotion")
+    private String emotion;
 
     @JsonIgnore
     @JoinColumn(name = "userId")

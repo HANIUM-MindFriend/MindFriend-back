@@ -16,6 +16,7 @@ public class getDiaryDetail {
     private LocalDateTime createdAt;
     private String content;
     private String image;
+    private String emotion;
 
     public static getDiaryDetail of(Diary diary) {
         return getDiaryDetail.builder()
@@ -25,6 +26,7 @@ public class getDiaryDetail {
                 .createdAt(diary.getCreatedAt())
                 .content(diary.getContent())
                 .image(diary.getImage())
+                .emotion(diary.getEmotion())
                 .build();
     }
 }

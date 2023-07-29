@@ -3,6 +3,7 @@ package com.example.mindfriend.controller;
 import com.example.mindfriend.common.response.result.ResultCode;
 import com.example.mindfriend.common.response.result.ResultResponse;
 import com.example.mindfriend.dto.request.postDiary;
+import com.example.mindfriend.dto.request.postDiaryEmo;
 import com.example.mindfriend.dto.response.getDiary;
 import com.example.mindfriend.dto.response.getDiaryDetail;
 import com.example.mindfriend.service.DiaryService;
@@ -31,5 +32,12 @@ public class DiaryController {
     public ResultResponse<getDiaryDetail> getDiaryDetail(@PathVariable long diaryId) {
         getDiaryDetail response = diaryService.getDiaryDetail(diaryId);
         return new ResultResponse<>(GET_DIARY_SUCCESS, response);
+    }
+
+    // 다이어리 감정 추가
+    @PostMapping("/emo")
+    public  ResultResponse<getDiaryDetail> addEmotionToDiary(@RequestBody postDiaryEmo request) {
+        getDiaryDetail response =  diaryService.addEmotionToDiary(request);
+        return  new ResultResponse<>(GET_DIARY_SUCCESS, response);
     }
 }

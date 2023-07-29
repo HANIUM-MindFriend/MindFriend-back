@@ -5,6 +5,7 @@ import com.example.mindfriend.common.response.exception.UserNotFoundException;
 import com.example.mindfriend.domain.Diary;
 import com.example.mindfriend.domain.User;
 import com.example.mindfriend.dto.request.postDiary;
+import com.example.mindfriend.dto.request.postDiaryEmo;
 import com.example.mindfriend.dto.response.getDiary;
 import com.example.mindfriend.dto.response.getDiaryDetail;
 import com.example.mindfriend.repository.DiaryRepository;
@@ -13,8 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import static com.example.mindfriend.common.response.exception.ErrorCode.*;
+import static com.example.mindfriend.common.response.exception.ErrorCode.DIARY_NOT_FOUND;
+import static com.example.mindfriend.common.response.exception.ErrorCode.POST_DIARY_FAIL;
 
 @Service
 @Transactional
@@ -50,4 +51,20 @@ public class DiaryService {
                 .orElseThrow(() -> new MindFriendBusinessException(DIARY_NOT_FOUND));
         return getDiaryDetail.of(diary);
     }
+
+    // 일기 감정 수정(추가)
+    public getDiaryDetail addEmotionToDiary(postDiaryEmo request) {
+        Diary diary = diaryRepository.findById(request.getDiaryIdx())
+                .orElseThrow(() -> new MindFriendBusinessException(DIARY_NOT_FOUND));
+
+
+        diary.setEmotion(request.getEmotion());
+        Diary response = diaryRepository.save(diary);
+
+        if (response == null) {
+            throw new MindFriendBusinessException(POST_DIARY_FAIL);
+        }
+        return getDiaryDetail.of(response);
+    }
+
 }
