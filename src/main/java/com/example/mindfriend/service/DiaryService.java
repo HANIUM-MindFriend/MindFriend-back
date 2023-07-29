@@ -14,8 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.example.mindfriend.common.response.exception.ErrorCode.DIARY_NOT_FOUND;
-import static com.example.mindfriend.common.response.exception.ErrorCode.POST_DIARY_FAIL;
+import static com.example.mindfriend.common.response.exception.ErrorCode.*;
 
 @Service
 @Transactional
@@ -62,7 +61,7 @@ public class DiaryService {
         Diary response = diaryRepository.save(diary);
 
         if (response == null) {
-            throw new MindFriendBusinessException(POST_DIARY_FAIL);
+            throw new MindFriendBusinessException(POST_EMO_FAIL);
         }
         return getDiaryDetail.of(response);
     }
