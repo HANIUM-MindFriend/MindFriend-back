@@ -1,6 +1,8 @@
 package com.example.mindfriend.domain;
 
 import com.example.mindfriend.common.entity.BaseEntity;
+import com.example.mindfriend.domain.enums.Authority;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -35,6 +37,23 @@ public class User extends BaseEntity {
     @Column(name = "userProfileImg")
     private String userProfileImg;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "authority")
+    private Authority authority;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Diary> DiaryList = new ArrayList<>();
+
+    // 생성 메서드
+    @Builder
+    public User(String userId, String userPassword, String userNickname, String userBirth, String userEmail,
+                String userProfileImg) {
+        this.userId = userId;
+        this.userPassword = userPassword;
+        this.userNickname = userNickname;
+        this.userBirth = userBirth;
+        this.userEmail = userEmail;
+        this.userProfileImg = userProfileImg;
+        this.authority = Authority.USER;
+    }
 }

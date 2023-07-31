@@ -20,6 +20,8 @@ public enum ErrorCode {
 
     // User
     USER_NOT_FOUND(404, "U001", "존재 하지 않는 사용자입니다."),
+    EMAIL_ALREADY_EXIST(400, "U002", "이미 존재하는 이메일입니다."),
+    ID_ALREADY_EXIST(400, "U003", "이미 존재하는 아이디입니다."),
 
     // Diary
     DIARY_NOT_FOUND(404, "D003", "존재 하지 않는 다이어리입니다."),
