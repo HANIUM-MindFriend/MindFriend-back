@@ -26,9 +26,17 @@ spring:
     h2:
       console:
 
+jwt:
+  secret: VlwEyVBsYt9V7zq57TejMnVUyzblYcfPQye08f7MGVA9XkHa
+
   jackson:
     serialization:
       fail-on-empty-beans: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          audiences:
 
 
 
