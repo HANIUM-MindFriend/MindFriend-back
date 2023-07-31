@@ -23,9 +23,6 @@ public enum ErrorCode {
     EMAIL_ALREADY_EXIST(400, "U002", "이미 존재하는 이메일입니다."),
     ID_ALREADY_EXIST(400, "U003", "이미 존재하는 아이디입니다."),
 
-    // JWT
-    GET_USER_FAILED(500, "J001", "로그인 된 사용자를 가져오지 못했습니다. 로그인 상태를 확인해주세요."),
-
     // Diary
     DIARY_NOT_FOUND(404, "D003", "존재 하지 않는 다이어리입니다."),
     POST_DIARY_FAIL(400, "D004", "다이어리 작성에 실패했습니다."),

@@ -11,17 +11,17 @@ public class signUp {
     private String userNickname;
     private String userBirth;
     private String userEmail;
+    private String userProfileImg;
 
-
-    public User toEntity(PasswordEncoder passwordEncoder, String profileImg) {
+    public User toEntity(PasswordEncoder passwordEncoder) {
         User user = User.builder()
                 .userId(userId)
                 .userEmail(userEmail)
                 .userPassword(passwordEncoder.encode(userPassword))
                 .userNickname(userNickname)
-                .userProfileImg(profileImg)
                 .userBirth(userBirth)
                 .userEmail(userEmail)
+                .userProfileImg(userProfileImg)
                 .build();
 
         return user;
