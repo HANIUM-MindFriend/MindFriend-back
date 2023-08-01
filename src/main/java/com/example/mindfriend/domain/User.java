@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -53,7 +54,12 @@ public class User extends BaseEntity implements UserDetails {
         // 권한 정보를 저장하는 필드가 없다면, 별도의 권한 정보를 정의하고 사용자가 어떤 권한을 가지는지 반환해야 합니다.
         // 예를 들어, ROLE_USER, ROLE_ADMIN 등의 권한을 정의하고, 사용자가 가지는 권한에 따라 해당 Role 객체를 반환하면 됩니다.
         // 별도의 권한 정보가 없다면, 간단하게 빈 리스트를 반환할 수도 있습니다.
-        return new ArrayList<>(); // 또는 null 또는 사용자가 가지는 권한 목록을 반환
+        // 사용자가 가지는 권한을 리스트로 만듭니다. 여기에서는 사용자가 "ROLE_USER" 권한을 가진다고 가정합니다.
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+
+        // 권한 리스트를 반환합니다.
+        return authorities;
     }
 
     @Override

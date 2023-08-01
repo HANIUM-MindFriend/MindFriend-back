@@ -6,6 +6,7 @@ import com.example.mindfriend.dto.request.postDiary;
 import com.example.mindfriend.dto.request.postDiaryEmo;
 import com.example.mindfriend.dto.response.getDiary;
 import com.example.mindfriend.dto.response.getDiaryDetail;
+import com.example.mindfriend.security.SecurityUtils;
 import com.example.mindfriend.service.DiaryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,11 +20,12 @@ import static com.example.mindfriend.common.response.result.ResultCode.GET_DIARY
 @Slf4j
 public class DiaryController {
     private final DiaryService diaryService;
+    private final SecurityUtils securityUtils;
 
     // 일기 작성
-    @PostMapping("/{userId}")
-    public ResultResponse<getDiary> postDiary(@PathVariable long userId, @RequestBody postDiary request) {
-        getDiary response = diaryService.postDiary(userId, request);
+    @PostMapping("/write")
+    public ResultResponse<getDiary> postDiary(@RequestBody postDiary request) {
+        getDiary response = diaryService.postDiary(securityUtils.getCurrentUserId(), request);
         return new ResultResponse<>(ResultCode.POST_DIARY_SUCCESS, response);
     }
 

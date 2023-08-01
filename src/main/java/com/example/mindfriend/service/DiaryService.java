@@ -25,9 +25,9 @@ public class DiaryService {
 
     // 일기 작성
     @Transactional
-    public getDiary postDiary(Long userId, postDiary request) {
+    public getDiary postDiary(String userId, postDiary request) {
 
-        User user = userRepository.findById(userId)
+        User user = userRepository.findByUserId(userId)
                 .orElseThrow(UserNotFoundException::new);
 
         Diary diary = Diary.builder()

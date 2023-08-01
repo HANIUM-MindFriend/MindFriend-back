@@ -15,8 +15,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     // 유저 단건 조회
-    public getUser getUser(long userId) {
-        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+    public getUser getUser(String userId) {
+        User user = userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
         return getUser.of(user);
     }
 }
