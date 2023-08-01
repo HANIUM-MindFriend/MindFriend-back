@@ -9,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class getUser {
+    private Long userIdx;
     private String userId;
     private String userNickname;
     private String userEmail;
@@ -16,6 +17,7 @@ public class getUser {
 
     public static getUser of(User user) {
         return getUser.builder()
+                .userIdx(user.getUserIdx())
                 .userId(user.getUserId())
                 .userNickname(user.getUserNickname())
                 .userEmail(user.getUserEmail())
