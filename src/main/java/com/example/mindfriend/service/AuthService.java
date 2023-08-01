@@ -48,6 +48,10 @@ public class AuthService {
 
     // 로그인
     public TokenInfo signIn(signIn request) {
+
+        if (!userRepository.existsByUserId(request.getUserId())) {
+            throw new MindFriendBusinessException(USER_NOT_FOUND);
+        }
         // 1. Login ID/PW 기반으로 Authentication 객체 생성
         // 이때 authentication는 인증 여부를 확인하는 authenticated 값이 false
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(request.getUserId(), request.getUserPassword());
