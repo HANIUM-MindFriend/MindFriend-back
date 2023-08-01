@@ -20,7 +20,7 @@ public class UserController {
     private final UserService userService;
     private final SecurityUtils securityUtils;
     // 유저 단일 조회
-    @GetMapping("/read")
+    @GetMapping("/")
     public ResultResponse<getUser> getUser() {
         getUser response = userService.getUser(securityUtils.getCurrentUserId());
         return new ResultResponse<>(GET_USER_SUCCESS, response);
