@@ -12,6 +12,7 @@ public enum ResultCode {
 
     // Auth
     SIGN_UP_SUCCESS(200, "A001", "회원가입에 성공하였습니다."),
+    SIGN_IN_SUCCESS(200, "A002", "로그인에 성공하였습니다."),
 
     // Diary
     POST_DIARY_SUCCESS(200, "D001", "일기를 작성하였습니다."),
