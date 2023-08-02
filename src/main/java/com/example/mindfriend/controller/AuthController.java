@@ -6,12 +6,12 @@ import com.example.mindfriend.dto.response.getUser;
 import com.example.mindfriend.security.TokenInfo;
 import com.example.mindfriend.service.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+
+import java.io.IOException;
 
 import static com.example.mindfriend.common.response.result.ResultCode.*;
 
@@ -23,14 +23,14 @@ public class AuthController {
 
     // 회원가입
     @PostMapping("/sign-up")
-    public ResultResponse<getUser> signUp(@RequestBody signUp request) {
-        getUser response = authService.signUp(request);
+    public ResultResponse<getUser> signUp(@RequestPart(value = "signUp") signUp request, @RequestPart(value = "profileImg")MultipartFile profileImg) throws IOException {
+        getUser response = authService.signUp(request, profileImg);
         return new ResultResponse<>(SIGN_UP_SUCCESS, response);
     }
 
     // 로그인
     @PostMapping("/sign-in")
-    public ResultResponse<TokenInfo> signIn(@Valid @RequestBody signIn request) {
+    public ResultResponse<TokenInfo> signIn(@Valid @RequestPart(value = "signUp") signIn request) {
         TokenInfo response = authService.signIn(request);
         return new ResultResponse<>(SIGN_IN_SUCCESS, response);
     }
