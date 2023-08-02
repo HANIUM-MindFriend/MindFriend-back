@@ -15,7 +15,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import static com.example.mindfriend.common.response.exception.ErrorCode.*;
@@ -28,9 +30,10 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
+    private final S3Uploader s3Uploader;
 
     // 회원가입
-    public getUser signUp(signUp request) {
+    public getUser signUp(signUp request, MultipartFile profileImg) throws IOException {
 
         if (userRepository.existsByUserEmail(request.getUserEmail())) {
             throw new MindFriendBusinessException(EMAIL_ALREADY_EXIST);
@@ -40,7 +43,8 @@ public class AuthService {
             throw new MindFriendBusinessException(ID_ALREADY_EXIST);
         }
 
-        User user = request.toEntity(passwordEncoder);
+        final String userProfileImg = s3Uploader.upload(profileImg, "images/users/");
+        User user = request.toEntity(passwordEncoder, userProfileImg);
         userRepository.save(user);
 
         return getUser.of(user);
