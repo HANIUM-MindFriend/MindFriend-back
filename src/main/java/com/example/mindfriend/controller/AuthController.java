@@ -30,7 +30,7 @@ public class AuthController {
 
     // 로그인
     @PostMapping("/sign-in")
-    public ResultResponse<TokenInfo> signIn(@Valid @RequestPart(value = "signUp") signIn request) {
+    public ResultResponse<TokenInfo> signIn(@RequestBody signIn request) {
         TokenInfo response = authService.signIn(request);
         return new ResultResponse<>(SIGN_IN_SUCCESS, response);
     }
