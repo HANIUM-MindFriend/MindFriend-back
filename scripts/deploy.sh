@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 작업 디렉토리를 /home/ec2-user/app으로 변경
-cd /home/ec2-user/app
+cd /home/ubuntu/app
 
 # 환경변수 DOCKER_APP_NAME을 spring으로 설정
 DOCKER_APP_NAME=spring
@@ -31,8 +31,6 @@ if [ -z "$EXIST_BLUE" ]; then
 
   # blue가 현재 실행중이지 않다면 -> 런타임 에러 또는 다른 이유로 배포가 되지 못한 상태
   if [ -z "$BLUE_HEALTH" ]; then
-    # slack으로 알람을 보낼 수 있는 스크립트를 실행한다.
-    sudo ./slack_blue.sh
   # blue가 현재 실행되고 있는 경우에만 green을 종료
   else
 
@@ -62,7 +60,7 @@ else
   else
 
       # /home/ec2-user/deploy.log: 로그 파일에 "blue 중단 시작"이라는 내용을 추가
-      echo "blue 중단 시작 : $(date +%Y)-$(date +%m)-$(date +%d) $(date +%H):$(date +%M):$(date +%S)" >> /home/ec2-user/deploy.log
+      echo "blue 중단 시작 : $(date +%Y)-$(date +%m)-$(date +%d) $(date +%H):$(date +%M):$(date +%S)" >> /home/ubuntu/deploy.log
 
       # docker-compose.blue.yml 파일을 사용하여 spring-green 프로젝트의 컨테이너를 중지
       sudo docker-compose -p ${DOCKER_APP_NAME}-blue -f docker-compose.blue.yml down
@@ -70,6 +68,6 @@ else
       # 사용하지 않는 이미지 삭제
       sudo docker image prune -af
 
-      echo "blue 중단 완료 : $(date +%Y)-$(date +%m)-$(date +%d) $(date +%H):$(date +%M):$(date +%S)" >> /home/ec2-user/deploy.log
+      echo "blue 중단 완료 : $(date +%Y)-$(date +%m)-$(date +%d) $(date +%H):$(date +%M):$(date +%S)" >> /home/ubuntu/deploy.log
   fi
 fi
