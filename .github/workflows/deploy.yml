@@ -64,6 +64,6 @@ jobs:
     - name: Code Deploy 배포 요청
       run: aws deploy create-deployment --application-name ai-diary
         --deployment-config-name CodeDeployDefault.OneAtATime
-        --deployment-group-name backend-deploy-group
+        --deployment-group-name ai-diary
         --s3-location bucket=backend-rex-bucket,bundleType=zip,key=spring-build.zip
     if: always()
