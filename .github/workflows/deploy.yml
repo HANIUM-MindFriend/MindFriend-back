@@ -62,8 +62,9 @@ jobs:
         ./spring-build.zip s3://aidiary-backend-app-bucket
 # CodeDelploy에 배포를 요청합니다.
     - name: Code Deploy 배포 요청
-      run: aws deploy create-deployment --application-name ai-diary
+      run: aws deploy create-deployment 
+        --application-name ai-diary
         --deployment-config-name CodeDeployDefault.OneAtATime
         --deployment-group-name ai-diary
-        --s3-location bucket=backend-rex-bucket,bundleType=zip,key=spring-build.zip
+        --s3-location bucket=aidiary-backend-app-bucket,bundleType=zip,key=spring-build.zip
     if: always()
