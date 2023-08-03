@@ -32,8 +32,8 @@ if [ -z "$EXIST_BLUE" ]; then
   # blue가 현재 실행중이지 않다면 -> 런타임 에러 또는 다른 이유로 배포가 되지 못한 상태
   if [ -z "$BLUE_HEALTH" ]; then
   # blue가 현재 실행되고 있는 경우에만 green을 종료
+  :
   else
-
     # /home/ubuntu/deploy.log: 로그 파일에 "green 중단 시작"이라는 내용을 추가
     echo "green 중단 시작 : $(date +%Y)-$(date +%m)-$(date +%d) $(date +%H):$(date +%M):$(date +%S)" >> /home/ubuntu/deploy.log
 
