@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
-    private final String[] allowedUrls = {"/", "/swagger-ui/**", "/v3/**", "/auth/sign-up", "/auth/sign-in"};
+    private final String[] allowedUrls = {"/", "/swagger-ui/**", "/v3/**", "/auth/sign-up", "/auth/sign-in", "/users/duplicate"};
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http

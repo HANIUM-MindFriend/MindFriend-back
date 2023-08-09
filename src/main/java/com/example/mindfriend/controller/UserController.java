@@ -1,15 +1,15 @@
 package com.example.mindfriend.controller;
 
 import com.example.mindfriend.common.response.result.ResultResponse;
+import com.example.mindfriend.dto.request.duplicateUserId;
 import com.example.mindfriend.dto.response.getUser;
-
 import com.example.mindfriend.security.SecurityUtils;
 import com.example.mindfriend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-
+import static com.example.mindfriend.common.response.result.ResultCode.DUPLICATE_USER_SUCCESS;
 import static com.example.mindfriend.common.response.result.ResultCode.GET_USER_SUCCESS;
 
 @RestController
@@ -24,5 +24,11 @@ public class UserController {
     public ResultResponse<getUser> getUser() {
         getUser response = userService.getUser(securityUtils.getCurrentUserId());
         return new ResultResponse<>(GET_USER_SUCCESS, response);
+    }
+    //중복 아이디 검사
+    @PostMapping("/duplicate")
+    public ResultResponse<Boolean> chkDuplicateUserId(@RequestBody duplicateUserId request) {
+        boolean response = userService.chkDuplicateUserId(request.getUserId());
+        return new ResultResponse<>(DUPLICATE_USER_SUCCESS, response);
     }
 }

@@ -7,8 +7,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ResultCode {
 
+    //DuplicateUser
+    DUPLICATE_USER_SUCCESS(200, "U001", "유저 id 중복 확인하였습니다."),
     // User
-    GET_USER_SUCCESS(200, "U001", "유저 단건 조회하였습니다."),
+    GET_USER_SUCCESS(200, "U002", "유저 단건 조회하였습니다."),
 
     // Auth
     SIGN_UP_SUCCESS(200, "A001", "회원가입에 성공하였습니다."),
