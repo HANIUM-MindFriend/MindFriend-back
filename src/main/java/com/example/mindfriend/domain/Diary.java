@@ -39,6 +39,31 @@ public class Diary extends BaseEntity {
     @ManyToOne
     private User user;
 
+    @Column(name = "fear")
+    private Long fear;
+
+    @Column(name = "surprise")
+    private Long surprise;
+
+    @Column(name = "angry")
+    private Long angry;
+
+    @Column(name = "sadness")
+    private Long sadness;
+
+    @Column(name = "neutral")
+    private Long neutral;
+
+    @Column(name = "happiness")
+    private Long happiness;
+
+    @Column(name = "disgust")
+    private Long disgust;
+
+    @Column(name = "mainEmotion")
+    private Long mainEmotion;
+
+
     @Builder
     public Diary(User user, String title, String content, String image) {
         this.user = user;
@@ -46,5 +71,4 @@ public class Diary extends BaseEntity {
         this.content = content;
         this.image = image;
     }
-
 }
