@@ -19,4 +19,8 @@ public class UserService {
         User user = userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
         return getUser.of(user);
     }
+    // 중복 아이디 검사
+    public boolean chkDuplicateUserId(String userId){
+        return userRepository.existsByUserId(userId);
+    }
 }

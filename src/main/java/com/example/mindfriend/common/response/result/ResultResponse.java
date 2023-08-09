@@ -16,11 +16,14 @@ public class ResultResponse<T> {
         this.message = resultCode.getMessage();
         this.data = data;
     }
-    public static ResultResponse of(ResultCode resultCode, Object data) {
-        return new ResultResponse(resultCode, data);
+
+    // 다음과 같이 제네릭 타입을 명시적으로 지정하도록 수정합니다.
+    public static <T> ResultResponse<T> of(ResultCode resultCode, T data) {
+        return new ResultResponse<>(resultCode, data);
     }
 
-    public static ResultResponse of(ResultCode resultCode) {
-        return new ResultResponse(resultCode, "");
+    // 마찬가지로 제네릭 타입을 명시적으로 지정하도록 수정합니다.
+    public static <T> ResultResponse<T> of(ResultCode resultCode) {
+        return new ResultResponse<>(resultCode, null); // 데이터가 없을 때는 null을 전달합니다.
     }
 }
