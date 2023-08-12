@@ -18,7 +18,8 @@ public enum ResultCode {
 
     // Diary
     POST_DIARY_SUCCESS(200, "D001", "일기를 작성하였습니다."),
-    GET_DIARY_SUCCESS(200, "D002", "일기 단건 조회하였습니다.");
+    GET_DIARY_SUCCESS(200, "D002", "일기 단건 조회하였습니다."),
+    DELETE_DIARY_SUCCESS(200, "D003", "일기를 삭제하였습니다.");
     private final int status;
     private final String code;
     private final String message;
