@@ -14,6 +14,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import static com.example.mindfriend.common.response.exception.ErrorCode.*;
 
 @Service
@@ -64,6 +68,23 @@ public class DiaryService {
             throw new MindFriendBusinessException(POST_EMO_FAIL);
         }
         return getDiaryDetail.of(response);
+    }
+
+    // 여러 일기 삭제
+    @Transactional
+    public List<Diary> deleteDiary(Long[] diaryIds) {
+        List<Diary> deletedDiarys = new ArrayList<>();
+
+        for(Long diaryIdx : diaryIds) {
+            Optional<Diary> diaryOptional = diaryRepository.findById(diaryIdx);
+
+            if (diaryOptional.isPresent()) {
+                Diary diary = diaryOptional.get();
+                deletedDiarys.add(diary);
+                diaryRepository.delete(diary);
+            }
+        }
+        return deletedDiarys;
     }
 
 }
