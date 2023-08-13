@@ -55,7 +55,7 @@ public class DiaryController {
         return new ResultResponse<>(DELETE_DIARY_SUCCESS, response);
     }
 
-    // 감정 별 일기 조회
+    // 감정 별 일기 검색(조회)
     @GetMapping("/emotion/{emotion}")
     public ResultResponse<List<getDiaryList>> angryDiary(@PathVariable Long emotion, @RequestParam String yearMonth) {
         YearMonth parsedYearMonth = YearMonth.parse(yearMonth);
@@ -63,11 +63,19 @@ public class DiaryController {
         return new ResultResponse<>(GET_DIARYLIST_SUCESS, response);
     }
 
-    // 키워드 별 일기 조회
+    // 키워드 별 일기 검색(조회)
     @GetMapping("/keyword/search")
     public ResultResponse<List<getDiaryList>> searchForKeyword(@RequestParam String keyword,  @RequestParam String yearMonth) {
         YearMonth parsedYearMonth = YearMonth.parse(yearMonth);
         List<getDiaryList> response = diaryService.getDiaryForKeyword(parsedYearMonth, keyword);
+        return new ResultResponse<>(GET_DIARYLIST_SUCESS, response);
+    }
+
+    // 날짜 별 일기 검색(조회)
+    @GetMapping("/date/search")
+    public ResultResponse<List<getDiaryList>> searchForDate(@RequestParam String yearMonth) {
+        YearMonth parsedYearMonth = YearMonth.parse(yearMonth);
+        List<getDiaryList> response = diaryService.getDiaryForDate(parsedYearMonth);
         return new ResultResponse<>(GET_DIARYLIST_SUCESS, response);
     }
 }
