@@ -55,11 +55,13 @@ public class DiaryController {
         return new ResultResponse<>(DELETE_DIARY_SUCCESS, response);
     }
 
-    // 감정 별 다이어리 조회
+    // 감정 별 일기 조회
     @GetMapping("/emotion/{emotion}")
     public ResultResponse<List<getDiaryList>> angryDiary(@PathVariable Long emotion, @RequestParam String yearMonth) {
         YearMonth parsedYearMonth = YearMonth.parse(yearMonth);
         List<getDiaryList> response = diaryService.getDiaryForEmo(parsedYearMonth, emotion);
         return new ResultResponse<>(GET_DIARYLIST_SUCESS, response);
     }
+
+
 }

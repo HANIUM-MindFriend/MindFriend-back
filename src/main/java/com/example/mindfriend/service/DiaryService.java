@@ -94,11 +94,7 @@ public class DiaryService {
         LocalDateTime startDateTime = yearMonth.atDay(1).atStartOfDay();
         LocalDateTime endDateTime = yearMonth.atEndOfMonth().atTime(23, 59, 59);
 
-        System.out.println(startDateTime);
-        System.out.println(endDateTime);
-
         List<Diary> diaries = diaryRepository.findByCreatedAtBetweenAndMainEmotion(startDateTime, endDateTime, emotion);
         return getDiaryList.of(diaries);
-
     }
 }
