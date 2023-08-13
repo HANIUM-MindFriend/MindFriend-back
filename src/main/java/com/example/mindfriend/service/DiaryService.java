@@ -8,11 +8,18 @@ import com.example.mindfriend.dto.request.postDiary;
 import com.example.mindfriend.dto.request.postDiaryEmo;
 import com.example.mindfriend.dto.response.getDiary;
 import com.example.mindfriend.dto.response.getDiaryDetail;
+import com.example.mindfriend.dto.response.getDiaryList;
 import com.example.mindfriend.repository.DiaryRepository;
 import com.example.mindfriend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import static com.example.mindfriend.common.response.exception.ErrorCode.*;
 
@@ -66,4 +73,47 @@ public class DiaryService {
         return getDiaryDetail.of(response);
     }
 
+    // 여러 일기 삭제
+    @Transactional
+    public List<Diary> deleteDiary(Long[] diaryIds) {
+        List<Diary> deletedDiarys = new ArrayList<>();
+
+        for(Long diaryIdx : diaryIds) {
+            Optional<Diary> diaryOptional = diaryRepository.findById(diaryIdx);
+
+            if (diaryOptional.isPresent()) {
+                Diary diary = diaryOptional.get();
+                deletedDiarys.add(diary);
+                diaryRepository.delete(diary);
+            }
+        }
+        return deletedDiarys;
+    }
+
+    public List<getDiaryList> getDiaryForEmo(YearMonth yearMonth, Long emotion) {
+        LocalDateTime startDateTime = yearMonth.atDay(1).atStartOfDay();
+        LocalDateTime endDateTime = yearMonth.atEndOfMonth().atTime(23, 59, 59);
+
+        List<Diary> diaries = diaryRepository.findByCreatedAtBetweenAndMainEmotion(startDateTime, endDateTime, emotion);
+
+        return getDiaryList.of(diaries);
+    }
+
+    public List<getDiaryList> getDiaryForKeyword(YearMonth yearMonth, String keyword) {
+        LocalDateTime startDateTime = yearMonth.atDay(1).atStartOfDay();
+        LocalDateTime endDateTime = yearMonth.atEndOfMonth().atTime(23, 59, 59);
+
+        List<Diary> diaries = diaryRepository.findByCreatedAtBetweenAndContentContaining(startDateTime, endDateTime, keyword);
+
+        return getDiaryList.of(diaries);
+    }
+
+    public List<getDiaryList> getDiaryForDate(YearMonth yearMonth) {
+        LocalDateTime startDateTime = yearMonth.atDay(1).atStartOfDay();
+        LocalDateTime endDateTime = yearMonth.atEndOfMonth().atTime(23, 59, 59);
+
+        List<Diary> diaries = diaryRepository.findByCreatedAtBetween(startDateTime, endDateTime);
+
+        return getDiaryList.of(diaries);
+    }
 }
