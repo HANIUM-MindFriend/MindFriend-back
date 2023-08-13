@@ -14,7 +14,9 @@ import com.example.mindfriend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
@@ -29,20 +31,19 @@ import static com.example.mindfriend.common.response.exception.ErrorCode.*;
 public class DiaryService {
     private final UserRepository userRepository;
     private final DiaryRepository diaryRepository;
+    private final S3Uploader s3Uploader;
 
     // 일기 작성
     @Transactional
-    public getDiary postDiary(String userId, postDiary request) {
+    public getDiary postDiary(String userId, postDiary request, MultipartFile postImg) throws IOException {
 
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(UserNotFoundException::new);
 
-        Diary diary = Diary.builder()
-                .user(user)
-                .title(request.getTitle())
-                .content(request.getContent())
-                .image(request.getImage())
-                .build();
+        final String userPostImg = s3Uploader.upload(postImg, "images/posts/");
+
+        Diary diary = request.toEntity(userPostImg);
+        diary.setUser(user);
 
         Diary response = diaryRepository.save(diary);
         if (response == null) {

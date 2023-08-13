@@ -13,7 +13,9 @@ import com.example.mindfriend.service.DiaryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.YearMonth;
 import java.util.List;
 
@@ -29,8 +31,8 @@ public class DiaryController {
 
     // 일기 작성
     @PostMapping("/write")
-    public ResultResponse<getDiary> postDiary(@RequestBody postDiary request) {
-        getDiary response = diaryService.postDiary(securityUtils.getCurrentUserId(), request);
+    public ResultResponse<getDiary> postDiary(@RequestPart(value = "postDiary") postDiary request, @RequestPart(value = "postImg")MultipartFile postImg) throws IOException {
+        getDiary response = diaryService.postDiary(securityUtils.getCurrentUserId(), request, postImg);
         return new ResultResponse<>(ResultCode.POST_DIARY_SUCCESS, response);
     }
 
@@ -65,7 +67,7 @@ public class DiaryController {
 
     // 키워드 별 일기 검색(조회)
     @GetMapping("/keyword/search")
-    public ResultResponse<List<getDiaryList>> searchForKeyword(@RequestParam String keyword,  @RequestParam String yearMonth) {
+    public ResultResponse<List<getDiaryList>> searchForKeyword(@RequestParam String keyword, @RequestParam String yearMonth) {
         YearMonth parsedYearMonth = YearMonth.parse(yearMonth);
         List<getDiaryList> response = diaryService.getDiaryForKeyword(parsedYearMonth, keyword);
         return new ResultResponse<>(GET_DIARYLIST_SUCESS, response);
