@@ -3,7 +3,6 @@ package com.example.mindfriend.controller;
 import com.example.mindfriend.common.response.result.ResultCode;
 import com.example.mindfriend.common.response.result.ResultResponse;
 import com.example.mindfriend.domain.Diary;
-import com.example.mindfriend.dto.request.deleteDiary;
 import com.example.mindfriend.dto.request.postDiary;
 import com.example.mindfriend.dto.request.postDiaryEmo;
 import com.example.mindfriend.dto.response.getDiary;
@@ -15,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
+import java.time.YearMonth;
 import java.util.List;
 
 import static com.example.mindfriend.common.response.result.ResultCode.*;
@@ -56,4 +55,11 @@ public class DiaryController {
         return new ResultResponse<>(DELETE_DIARY_SUCCESS, response);
     }
 
+    // 감정 별 다이어리 조회
+    @GetMapping("/emotion/{emotion}")
+    public ResultResponse<List<getDiaryList>> angryDiary(@PathVariable Long emotion, @RequestParam String yearMonth) {
+        YearMonth parsedYearMonth = YearMonth.parse(yearMonth);
+        List<getDiaryList> response = diaryService.getDiaryForEmo(parsedYearMonth, emotion);
+        return new ResultResponse<>(GET_DIARYLIST_SUCESS, response);
+    }
 }
