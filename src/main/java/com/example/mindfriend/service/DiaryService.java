@@ -95,6 +95,7 @@ public class DiaryService {
         LocalDateTime endDateTime = yearMonth.atEndOfMonth().atTime(23, 59, 59);
 
         List<Diary> diaries = diaryRepository.findByCreatedAtBetweenAndMainEmotion(startDateTime, endDateTime, emotion);
+
         return getDiaryList.of(diaries);
     }
 
@@ -103,6 +104,15 @@ public class DiaryService {
         LocalDateTime endDateTime = yearMonth.atEndOfMonth().atTime(23, 59, 59);
 
         List<Diary> diaries = diaryRepository.findByCreatedAtBetweenAndContentContaining(startDateTime, endDateTime, keyword);
+
+        return getDiaryList.of(diaries);
+    }
+
+    public List<getDiaryList> getDiaryForDate(YearMonth yearMonth) {
+        LocalDateTime startDateTime = yearMonth.atDay(1).atStartOfDay();
+        LocalDateTime endDateTime = yearMonth.atEndOfMonth().atTime(23, 59, 59);
+
+        List<Diary> diaries = diaryRepository.findByCreatedAtBetween(startDateTime, endDateTime);
 
         return getDiaryList.of(diaries);
     }
