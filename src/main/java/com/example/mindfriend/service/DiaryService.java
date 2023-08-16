@@ -17,8 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -53,11 +56,20 @@ public class DiaryService {
     }
 
     // 일기 단건 조회
-    public getDiaryDetail getDiaryDetail(long diaryId) {
-        Diary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new MindFriendBusinessException(DIARY_NOT_FOUND));
+    public getDiaryDetail getDiaryDetail(String userId, getDiary request) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        LocalDate localDate = request.getDate().toLocalDate(); // LocalDateTime을 LocalDate로 변환
+
+        Optional<Diary> diaryOptional = diaryRepository.findByUser_userIdAndCreatedAt(user.getUserIdx(), localDate.atStartOfDay());
+
+        Diary diary = diaryOptional.orElseThrow(() -> new MindFriendBusinessException(DIARY_NOT_FOUND));
+
         return getDiaryDetail.of(diary);
     }
+
+
 
     // 일기 감정 수정(추가)
     public getDiaryDetail addEmotionToDiary(postDiaryEmo request) {
