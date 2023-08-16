@@ -22,6 +22,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(404, "U001", "존재 하지 않는 사용자입니다."),
     EMAIL_ALREADY_EXIST(400, "U002", "이미 존재하는 이메일입니다."),
     ID_ALREADY_EXIST(400, "U003", "이미 존재하는 아이디입니다."),
+    INVALID_USER_ID(404, "U004", "아이디에 오류가 있습니다."),
 
     // JWT
     GET_USER_FAILED(500, "J001", "로그인 된 사용자를 가져오지 못했습니다. 로그인 상태를 확인해주세요."),

@@ -1,14 +1,15 @@
 package com.example.mindfriend.repository;
 
 import com.example.mindfriend.domain.Diary;
+import com.example.mindfriend.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 public interface DiaryRepository extends JpaRepository<Diary, Long> {
-    Optional<Diary> findByUser_userIdAndCreatedAt(Long userId, LocalDateTime createdAt);
+    List<Diary> findByUserAndCreatedAtBetween(User user, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
 
     List<Diary> findByCreatedAtBetweenAndMainEmotion(LocalDateTime startDateTime, LocalDateTime endDateTime, Long emotion);
 
