@@ -6,7 +6,6 @@ import com.example.mindfriend.domain.Diary;
 import com.example.mindfriend.domain.User;
 import com.example.mindfriend.dto.request.postDiary;
 import com.example.mindfriend.dto.request.postDiaryEmo;
-import com.example.mindfriend.dto.request.readDiary;
 import com.example.mindfriend.dto.response.getDiary;
 import com.example.mindfriend.dto.response.getDiaryDetail;
 import com.example.mindfriend.dto.response.getDiaryList;
@@ -18,7 +17,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -53,12 +56,12 @@ public class DiaryService {
     }
 
     // 일기 단건 조회
-    public getDiaryDetail getDiaryDetail(String userId, readDiary request) {
+    public getDiaryDetail getDiaryDetail(String userId, String dateString) {
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(UserNotFoundException::new);
 
         // Convert Date to LocalDate
-        LocalDate localDate = request.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate localDate = LocalDate.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE);
 
         LocalDateTime startDateTime = localDate.atStartOfDay();
         LocalDateTime endDateTime = localDate.atTime(LocalTime.MAX);
