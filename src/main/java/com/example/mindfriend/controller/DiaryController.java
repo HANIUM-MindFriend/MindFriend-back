@@ -5,7 +5,6 @@ import com.example.mindfriend.common.response.result.ResultResponse;
 import com.example.mindfriend.domain.Diary;
 import com.example.mindfriend.dto.request.postDiary;
 import com.example.mindfriend.dto.request.postDiaryEmo;
-import com.example.mindfriend.dto.request.readDiary;
 import com.example.mindfriend.dto.response.getDiary;
 import com.example.mindfriend.dto.response.getDiaryDetail;
 import com.example.mindfriend.dto.response.getDiaryList;
@@ -39,8 +38,8 @@ public class DiaryController {
 
     // 다이어리 단건 조회
     @GetMapping("/read")
-    public ResultResponse<getDiaryDetail> getDiaryDetail(@RequestBody readDiary request) {
-        getDiaryDetail response = diaryService.getDiaryDetail(securityUtils.getCurrentUserId(),request);
+    public ResultResponse<getDiaryDetail> getDiaryDetail(@RequestParam String date) {
+        getDiaryDetail response = diaryService.getDiaryDetail(securityUtils.getCurrentUserId(), date);
         return new ResultResponse<>(GET_DIARY_SUCCESS, response);
     }
 
