@@ -18,10 +18,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import java.time.LocalDate;
+
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -89,11 +95,33 @@ public class DiaryService {
     }
 
     // 일기 단건 조회
-    public getDiaryDetail getDiaryDetail(long diaryId) {
-        Diary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(() -> new MindFriendBusinessException(DIARY_NOT_FOUND));
+    public getDiaryDetail getDiaryDetail(String userId, String dateString) {
+        User user = userRepository.findByUserId(userId)
+                .orElseThrow(UserNotFoundException::new);
+
+        // Convert Date to LocalDate
+        LocalDate localDate = LocalDate.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE);
+
+        LocalDateTime startDateTime = localDate.atStartOfDay();
+        LocalDateTime endDateTime = localDate.atTime(LocalTime.MAX);
+
+        List<Diary> diaryList = diaryRepository.findByUserAndCreatedAtBetween(user, startDateTime, endDateTime);
+
+        if (diaryList.isEmpty()) {
+            throw new MindFriendBusinessException(DIARY_NOT_FOUND);
+        }
+
+        // 여기서 diaryList에서 원하는 일기를 선택하는 로직 추가
+        // 예: 첫 번째 일기를 선택한다고 가정
+        Diary diary = diaryList.get(0);
+
         return getDiaryDetail.of(diary);
     }
+
+
+
+
+
 
     // 일기 감정 수정(추가)
     public getDiaryDetail addEmotionToDiary(postDiaryEmo request) {

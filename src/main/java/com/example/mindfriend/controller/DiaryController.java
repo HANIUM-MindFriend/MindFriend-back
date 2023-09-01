@@ -76,9 +76,9 @@ public class DiaryController {
 
 
     // 다이어리 단건 조회
-    @GetMapping("/{diaryId}")
-    public ResultResponse<getDiaryDetail> getDiaryDetail(@PathVariable long diaryId) {
-        getDiaryDetail response = diaryService.getDiaryDetail(diaryId);
+    @GetMapping("/read")
+    public ResultResponse<getDiaryDetail> getDiaryDetail(@RequestParam String date) {
+        getDiaryDetail response = diaryService.getDiaryDetail(securityUtils.getCurrentUserId(), date);
         return new ResultResponse<>(GET_DIARY_SUCCESS, response);
     }
 
