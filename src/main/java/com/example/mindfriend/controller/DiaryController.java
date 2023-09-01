@@ -3,6 +3,7 @@ package com.example.mindfriend.controller;
 import com.example.mindfriend.common.response.result.ResultCode;
 import com.example.mindfriend.common.response.result.ResultResponse;
 import com.example.mindfriend.domain.Diary;
+import com.example.mindfriend.dto.request.PredictionRequest;
 import com.example.mindfriend.dto.request.postDiary;
 import com.example.mindfriend.dto.request.postDiaryEmo;
 import com.example.mindfriend.dto.response.getDiary;
@@ -15,7 +16,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.time.YearMonth;
 import java.util.List;
 
@@ -31,10 +34,46 @@ public class DiaryController {
 
     // 일기 작성
     @PostMapping("/write")
-    public ResultResponse<getDiary> postDiary(@RequestPart(value = "postDiary") postDiary request, @RequestPart(value = "postImg")MultipartFile postImg) throws IOException {
+    public ResultResponse<getDiary> postDiary(@RequestPart(value = "postDiary") postDiary request, @RequestPart(value = "postImg")MultipartFile postImg) throws IOException, InterruptedException {
         getDiary response = diaryService.postDiary(securityUtils.getCurrentUserId(), request, postImg);
         return new ResultResponse<>(ResultCode.POST_DIARY_SUCCESS, response);
     }
+
+    @PostMapping("/predict")
+    public String predict(@RequestBody PredictionRequest request) {
+        String sentence = request.getSentence();
+        String pythonInterpreterPath = "/Library/Frameworks/Python.framework/Versions/3.7/bin/python3"; // Python 인터프리터 경로 설정
+        String pythonScriptPath = "/Users/songjuhee/Desktop/Model/main.py"; // Python 스크립트 경로 설정
+
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder(pythonInterpreterPath, pythonScriptPath, sentence);
+            processBuilder.redirectErrorStream(true);
+
+            Process process = processBuilder.start();
+            System.out.println("파이참 실행 성공");
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+            String output;
+            StringBuilder result = new StringBuilder();
+            while ((output = reader.readLine()) != null) {
+                result.append(output).append("\n");
+            }
+
+            int exitCode = process.waitFor();
+            if (exitCode == 0) {
+                return result.toString();
+            } else {
+                return "오류가 발생했습니다";
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            return "오류가 발생했습니다";
+        }
+
+    }
+
+
 
     // 다이어리 단건 조회
     @GetMapping("/{diaryId}")
