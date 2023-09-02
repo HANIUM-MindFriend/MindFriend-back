@@ -69,7 +69,7 @@ public class DiaryService {
             try (InputStream inputStream = process.getInputStream();
                  BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
                 String line;
-                while((line = reader.readLine()) != null) {
+                while ((line = reader.readLine()) != null) {
                     output.append(line).append("\n");
                 }
             }
@@ -81,15 +81,27 @@ public class DiaryService {
             e.printStackTrace();
         }
 
-        Diary diary = request.toEntity(userPostImg);
-        diary.setUser(user);
+        // 오늘 날짜 일기 찾기
+        LocalDateTime today = LocalDateTime.now();
 
-        Diary response = diaryRepository.save(diary);
-        if (response == null) {
-            throw new MindFriendBusinessException(POST_DIARY_FAIL);
+        Diary existingDiary = diaryRepository.findDiariesCreatedToday(user, today);
+
+        if (existingDiary != null) {
+
+            // 이미 오늘 일기가 존재한다면 내용을 추가
+            existingDiary.setTitle(request.getTitle());
+            existingDiary.setContent(request.getContent());
+            existingDiary.setImage(userPostImg);
+
+            Diary response = diaryRepository.save(existingDiary);
+            if (response == null) {
+                throw new MindFriendBusinessException(POST_DIARY_FAIL);
+            }
+            return getDiary.of(response);
         }
-        return getDiary.of(response);
+        throw new MindFriendBusinessException(POST_DIARY_FAIL);
     }
+
 
     private String runModelWithContent(String content) {
         // content 값을 가지고 모델 실행을 수행하고 결과를 반환하는 코드 작성
@@ -193,7 +205,6 @@ public class DiaryService {
         Random random = new Random();
 
         int randomInt = random.nextInt(7);
-        System.out.println(randomInt);
 
         Diary diary = new Diary();
         diary.setUser(user);
