@@ -107,5 +107,4 @@ public class Diary extends BaseEntity {
         }
         return increasedColumn; // 증가한 컬럼 이름 반환
     }
-
 }

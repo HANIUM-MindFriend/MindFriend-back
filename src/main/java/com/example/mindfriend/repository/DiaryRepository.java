@@ -21,4 +21,6 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     @Query("SELECT d FROM Diary d WHERE d.user = :user AND FUNCTION('DATE', d.createdAt) = FUNCTION('DATE', :today)")
     Diary findDiariesCreatedToday(@Param("user") User user, @Param("today") LocalDateTime today);
 
+    Diary findByMainEmotion(Long diaryIdx);
+
 }

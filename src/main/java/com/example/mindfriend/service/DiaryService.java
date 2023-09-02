@@ -7,10 +7,7 @@ import com.example.mindfriend.domain.User;
 import com.example.mindfriend.dto.request.postAiDiary;
 import com.example.mindfriend.dto.request.postDiary;
 import com.example.mindfriend.dto.request.postDiaryEmo;
-import com.example.mindfriend.dto.response.GetContentEmo;
-import com.example.mindfriend.dto.response.getDiary;
-import com.example.mindfriend.dto.response.getDiaryDetail;
-import com.example.mindfriend.dto.response.getDiaryList;
+import com.example.mindfriend.dto.response.*;
 import com.example.mindfriend.repository.DiaryRepository;
 import com.example.mindfriend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -213,5 +210,14 @@ public class DiaryService {
         Diary response = diaryRepository.save(diary);
 
         return GetContentEmo.of(response, randomInt, increasedEmotion);
+    }
+
+    public GetMainEmo getMainEmotion(Long diaryIdx) {
+
+        Optional<Diary> diary = diaryRepository.findById(diaryIdx);
+
+        int mainEmo = diary.get().getMainEmotion();
+        return GetMainEmo.of(diary, mainEmo);
+
     }
 }
