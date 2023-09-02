@@ -4,8 +4,10 @@ import com.example.mindfriend.common.response.result.ResultCode;
 import com.example.mindfriend.common.response.result.ResultResponse;
 import com.example.mindfriend.domain.Diary;
 import com.example.mindfriend.dto.request.PredictionRequest;
+import com.example.mindfriend.dto.request.postAiDiary;
 import com.example.mindfriend.dto.request.postDiary;
 import com.example.mindfriend.dto.request.postDiaryEmo;
+import com.example.mindfriend.dto.response.GetContentEmo;
 import com.example.mindfriend.dto.response.getDiary;
 import com.example.mindfriend.dto.response.getDiaryDetail;
 import com.example.mindfriend.dto.response.getDiaryList;
@@ -118,5 +120,12 @@ public class DiaryController {
         YearMonth parsedYearMonth = YearMonth.parse(yearMonth);
         List<getDiaryList> response = diaryService.getDiaryForDate(parsedYearMonth);
         return new ResultResponse<>(GET_DIARYLIST_SUCESS, response);
+    }
+
+    // 일기 작성 후 해당 텍스트 감정 반환
+    @PostMapping("/write/emo")
+    public ResultResponse<GetContentEmo> postAiDiary(@RequestPart(value = "postAiDiary") postAiDiary request) {
+        GetContentEmo response = diaryService.postAiDiary(securityUtils.getCurrentUserId(), request);
+        return new ResultResponse<>(POST_DIARY_SUCCESS, response);
     }
 }

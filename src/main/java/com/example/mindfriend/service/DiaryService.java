@@ -4,8 +4,10 @@ import com.example.mindfriend.common.response.exception.MindFriendBusinessExcept
 import com.example.mindfriend.common.response.exception.UserNotFoundException;
 import com.example.mindfriend.domain.Diary;
 import com.example.mindfriend.domain.User;
+import com.example.mindfriend.dto.request.postAiDiary;
 import com.example.mindfriend.dto.request.postDiary;
 import com.example.mindfriend.dto.request.postDiaryEmo;
+import com.example.mindfriend.dto.response.GetContentEmo;
 import com.example.mindfriend.dto.response.getDiary;
 import com.example.mindfriend.dto.response.getDiaryDetail;
 import com.example.mindfriend.dto.response.getDiaryList;
@@ -31,6 +33,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import static com.example.mindfriend.common.response.exception.ErrorCode.*;
 
@@ -118,11 +121,6 @@ public class DiaryService {
         return getDiaryDetail.of(diary);
     }
 
-
-
-
-
-
     // 일기 감정 수정(추가)
     public getDiaryDetail addEmotionToDiary(postDiaryEmo request) {
         Diary diary = diaryRepository.findById(request.getDiaryIdx())
@@ -180,5 +178,29 @@ public class DiaryService {
         List<Diary> diaries = diaryRepository.findByCreatedAtBetween(startDateTime, endDateTime);
 
         return getDiaryList.of(diaries);
+    }
+
+    public GetContentEmo postAiDiary(String userIdx, postAiDiary request) {
+        User user = userRepository.findByUserId(userIdx)
+                .orElseThrow(UserNotFoundException::new);
+
+        /*
+        ai 텍스트 분석이 처리가 완료되면
+        해당 텍스트에 대한 감정 인덱스 반환 코드 추가 예정
+        현재는 분석이 완료되었다는 가정하에 랜덤값 반환됨
+         */
+
+        Random random = new Random();
+
+        int randomInt = random.nextInt(7);
+        System.out.println(randomInt);
+
+        Diary diary = new Diary();
+        diary.setUser(user);
+        String increasedEmotion = diary.increaseEmo(randomInt);
+
+        Diary response = diaryRepository.save(diary);
+
+        return GetContentEmo.of(response, randomInt, increasedEmotion);
     }
 }
