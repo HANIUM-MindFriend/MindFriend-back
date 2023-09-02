@@ -203,13 +203,25 @@ public class DiaryService {
 
         int randomInt = random.nextInt(7);
 
-        Diary diary = new Diary();
-        diary.setUser(user);
-        String increasedEmotion = diary.increaseEmo(randomInt);
+        LocalDateTime today = LocalDateTime.now();
+        Diary existingDiary = diaryRepository.findDiariesCreatedToday(user, today);
 
-        Diary response = diaryRepository.save(diary);
+        // 기존에 작성한 일기가 없다면
+        if (existingDiary == null) {
+            Diary diary = new Diary();
+            diary.setUser(user);
+            String increasedEmotion = diary.increaseEmo(randomInt);
 
-        return GetContentEmo.of(response, randomInt, increasedEmotion);
+            Diary response = diaryRepository.save(diary);
+
+            return GetContentEmo.of(response, randomInt, increasedEmotion);
+        } else {
+
+            String increasedEmotion = existingDiary.increaseEmo(randomInt);
+            Diary updatedDiary = diaryRepository.save(existingDiary);
+
+            return GetContentEmo.of(updatedDiary, randomInt, increasedEmotion);
+        }
     }
 
     public GetMainEmo getMainEmotion(Long diaryIdx) {
@@ -218,6 +230,5 @@ public class DiaryService {
 
         int mainEmo = diary.get().getMainEmotion();
         return GetMainEmo.of(diary, mainEmo);
-
     }
 }
