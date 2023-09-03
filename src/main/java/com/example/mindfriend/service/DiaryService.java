@@ -216,9 +216,10 @@ public class DiaryService {
 
             return GetContentEmo.of(response, randomInt, increasedEmotion);
         } else {
-
             String increasedEmotion = existingDiary.increaseEmo(randomInt);
             Diary updatedDiary = diaryRepository.save(existingDiary);
+
+            diaryRepository.updateMainEmotion(updatedDiary.getDiaryIdx());
 
             return GetContentEmo.of(updatedDiary, randomInt, increasedEmotion);
         }
