@@ -4,11 +4,10 @@ import com.example.mindfriend.common.response.result.ResultCode;
 import com.example.mindfriend.common.response.result.ResultResponse;
 import com.example.mindfriend.domain.Diary;
 import com.example.mindfriend.dto.request.PredictionRequest;
+import com.example.mindfriend.dto.request.postAiDiary;
 import com.example.mindfriend.dto.request.postDiary;
 import com.example.mindfriend.dto.request.postDiaryEmo;
-import com.example.mindfriend.dto.response.getDiary;
-import com.example.mindfriend.dto.response.getDiaryDetail;
-import com.example.mindfriend.dto.response.getDiaryList;
+import com.example.mindfriend.dto.response.*;
 import com.example.mindfriend.security.SecurityUtils;
 import com.example.mindfriend.service.DiaryService;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +33,7 @@ public class DiaryController {
 
     // 일기 작성
     @PostMapping("/write")
-    public ResultResponse<getDiary> postDiary(@RequestPart(value = "postDiary") postDiary request, @RequestPart(value = "postImg")MultipartFile postImg) throws IOException, InterruptedException {
+    public ResultResponse<getDiary> postDiary(@RequestPart(value = "postDiary") postDiary request, @RequestPart(value = "postImg") MultipartFile postImg) throws IOException, InterruptedException {
         getDiary response = diaryService.postDiary(securityUtils.getCurrentUserId(), request, postImg);
         return new ResultResponse<>(ResultCode.POST_DIARY_SUCCESS, response);
     }
@@ -74,7 +73,6 @@ public class DiaryController {
     }
 
 
-
     // 다이어리 단건 조회
     @GetMapping("/read")
     public ResultResponse<getDiaryDetail> getDiaryDetail(@RequestParam String date) {
@@ -84,9 +82,9 @@ public class DiaryController {
 
     // 다이어리 감정 추가
     @PostMapping("/emo")
-    public  ResultResponse<getDiaryDetail> addEmotionToDiary(@RequestBody postDiaryEmo request) {
-        getDiaryDetail response =  diaryService.addEmotionToDiary(request);
-        return  new ResultResponse<>(GET_DIARY_SUCCESS, response);
+    public ResultResponse<getDiaryDetail> addEmotionToDiary(@RequestBody postDiaryEmo request) {
+        getDiaryDetail response = diaryService.addEmotionToDiary(request);
+        return new ResultResponse<>(GET_DIARY_SUCCESS, response);
     }
 
     // 일기 삭제
@@ -118,5 +116,19 @@ public class DiaryController {
         YearMonth parsedYearMonth = YearMonth.parse(yearMonth);
         List<getDiaryList> response = diaryService.getDiaryForDate(parsedYearMonth);
         return new ResultResponse<>(GET_DIARYLIST_SUCESS, response);
+    }
+
+    // 일기 작성 후 해당 텍스트 감정 반환
+    @PostMapping("/write/emo")
+    public ResultResponse<GetContentEmo> postAiDiary(@RequestPart(value = "postAiDiary") postAiDiary request) {
+        GetContentEmo response = diaryService.postAiDiary(securityUtils.getCurrentUserId(), request);
+        return new ResultResponse<>(POST_DIARY_SUCCESS, response);
+    }
+
+    // 다이어리 메인 감정 반환
+    @GetMapping("/main/{diaryIdx}")
+    public ResultResponse<GetMainEmo> getMainEmotion(@PathVariable Long diaryIdx) {
+        GetMainEmo response = diaryService.getMainEmotion(diaryIdx);
+        return new ResultResponse<>(GET_MAIN_EMOTION_SUCCEESS, response);
     }
 }

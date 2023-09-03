@@ -4,11 +4,10 @@ import com.example.mindfriend.common.response.exception.MindFriendBusinessExcept
 import com.example.mindfriend.common.response.exception.UserNotFoundException;
 import com.example.mindfriend.domain.Diary;
 import com.example.mindfriend.domain.User;
+import com.example.mindfriend.dto.request.postAiDiary;
 import com.example.mindfriend.dto.request.postDiary;
 import com.example.mindfriend.dto.request.postDiaryEmo;
-import com.example.mindfriend.dto.response.getDiary;
-import com.example.mindfriend.dto.response.getDiaryDetail;
-import com.example.mindfriend.dto.response.getDiaryList;
+import com.example.mindfriend.dto.response.*;
 import com.example.mindfriend.repository.DiaryRepository;
 import com.example.mindfriend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +30,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import static com.example.mindfriend.common.response.exception.ErrorCode.*;
 
@@ -66,7 +66,7 @@ public class DiaryService {
             try (InputStream inputStream = process.getInputStream();
                  BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
                 String line;
-                while((line = reader.readLine()) != null) {
+                while ((line = reader.readLine()) != null) {
                     output.append(line).append("\n");
                 }
             }
@@ -78,15 +78,27 @@ public class DiaryService {
             e.printStackTrace();
         }
 
-        Diary diary = request.toEntity(userPostImg);
-        diary.setUser(user);
+        // 오늘 날짜 일기 찾기
+        LocalDateTime today = LocalDateTime.now();
 
-        Diary response = diaryRepository.save(diary);
-        if (response == null) {
-            throw new MindFriendBusinessException(POST_DIARY_FAIL);
+        Diary existingDiary = diaryRepository.findDiariesCreatedToday(user, today);
+
+        if (existingDiary != null) {
+
+            // 이미 오늘 일기가 존재한다면 내용을 추가
+            existingDiary.setTitle(request.getTitle());
+            existingDiary.setContent(request.getContent());
+            existingDiary.setImage(userPostImg);
+
+            Diary response = diaryRepository.save(existingDiary);
+            if (response == null) {
+                throw new MindFriendBusinessException(POST_DIARY_FAIL);
+            }
+            return getDiary.of(response);
         }
-        return getDiary.of(response);
+        throw new MindFriendBusinessException(POST_DIARY_FAIL);
     }
+
 
     private String runModelWithContent(String content) {
         // content 값을 가지고 모델 실행을 수행하고 결과를 반환하는 코드 작성
@@ -117,11 +129,6 @@ public class DiaryService {
 
         return getDiaryDetail.of(diary);
     }
-
-
-
-
-
 
     // 일기 감정 수정(추가)
     public getDiaryDetail addEmotionToDiary(postDiaryEmo request) {
@@ -180,5 +187,47 @@ public class DiaryService {
         List<Diary> diaries = diaryRepository.findByCreatedAtBetween(startDateTime, endDateTime);
 
         return getDiaryList.of(diaries);
+    }
+
+    public GetContentEmo postAiDiary(String userIdx, postAiDiary request) {
+        User user = userRepository.findByUserId(userIdx)
+                .orElseThrow(UserNotFoundException::new);
+
+        /*
+        ai 텍스트 분석이 처리가 완료되면
+        해당 텍스트에 대한 감정 인덱스 반환 코드 추가 예정
+        현재는 분석이 완료되었다는 가정하에 랜덤값 반환됨
+         */
+
+        Random random = new Random();
+
+        int randomInt = random.nextInt(7);
+
+        LocalDateTime today = LocalDateTime.now();
+        Diary existingDiary = diaryRepository.findDiariesCreatedToday(user, today);
+
+        // 기존에 작성한 일기가 없다면
+        if (existingDiary == null) {
+            Diary diary = new Diary();
+            diary.setUser(user);
+            String increasedEmotion = diary.increaseEmo(randomInt);
+
+            Diary response = diaryRepository.save(diary);
+
+            return GetContentEmo.of(response, randomInt, increasedEmotion);
+        } else {
+            String increasedEmotion = existingDiary.increaseEmo(randomInt);
+            Diary updatedDiary = diaryRepository.save(existingDiary);
+
+            diaryRepository.updateMainEmotion(updatedDiary.getDiaryIdx());
+
+            return GetContentEmo.of(updatedDiary, randomInt, increasedEmotion);
+        }
+    }
+
+    public GetMainEmo getMainEmotion(Long diaryIdx) {
+        Optional<Diary> diary = diaryRepository.findById(diaryIdx);
+
+        return GetMainEmo.of(diary);
     }
 }

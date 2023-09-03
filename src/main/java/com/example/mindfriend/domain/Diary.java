@@ -40,29 +40,28 @@ public class Diary extends BaseEntity {
     private User user;
 
     @Column(name = "fear")
-    private Long fear;
+    private int fear;
 
     @Column(name = "surprise")
-    private Long surprise;
+    private int surprise;
 
     @Column(name = "angry")
-    private Long angry;
+    private int angry;
 
     @Column(name = "sadness")
-    private Long sadness;
+    private int sadness;
 
     @Column(name = "neutral")
-    private Long neutral;
+    private int neutral;
 
     @Column(name = "happiness")
-    private Long happiness;
+    private int happiness;
 
     @Column(name = "disgust")
-    private Long disgust;
+    private int disgust;
 
     @Column(name = "mainEmotion")
-    private Long mainEmotion;
-
+    private String mainEmotion;
 
     @Builder
     public Diary(User user, String title, String content, String image) {
@@ -70,5 +69,42 @@ public class Diary extends BaseEntity {
         this.title = title;
         this.content = content;
         this.image = image;
+    }
+
+    // == 상태 변경 메서드 == //
+    public String increaseEmo(int emotionType) {
+        String increasedColumn = null; // 증가한 컬럼 이름을 저장할 변수 초기화
+
+        switch (emotionType) {
+            case 1:
+                this.angry++;
+                increasedColumn = "angry"; // angry 증가
+                break;
+            case 2:
+                this.disgust++;
+                increasedColumn = "disgust"; // disgust 증가
+                break;
+            case 3:
+                this.fear++;
+                increasedColumn = "fear"; // fear 증가
+                break;
+            case 4:
+                this.happiness++;
+                increasedColumn = "happiness"; // happiness 증가
+                break;
+            case 5:
+                this.neutral++;
+                increasedColumn = "neutral"; // neutral 증가
+                break;
+            case 6:
+                this.sadness++;
+                increasedColumn = "sadness"; // sadness 증가
+                break;
+            default:
+                this.surprise++;
+                increasedColumn = "surprise"; // surprise 증가
+                break;
+        }
+        return increasedColumn; // 증가한 컬럼 이름 반환
     }
 }
