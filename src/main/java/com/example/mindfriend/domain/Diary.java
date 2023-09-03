@@ -61,7 +61,7 @@ public class Diary extends BaseEntity {
     private int disgust;
 
     @Column(name = "mainEmotion")
-    private int mainEmotion;
+    private String mainEmotion;
 
     @Builder
     public Diary(User user, String title, String content, String image) {
