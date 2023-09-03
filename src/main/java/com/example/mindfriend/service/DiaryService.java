@@ -226,10 +226,8 @@ public class DiaryService {
     }
 
     public GetMainEmo getMainEmotion(Long diaryIdx) {
-
         Optional<Diary> diary = diaryRepository.findById(diaryIdx);
 
-        int mainEmo = diary.get().getMainEmotion();
-        return GetMainEmo.of(diary, mainEmo);
+        return GetMainEmo.of(diary);
     }
 }
