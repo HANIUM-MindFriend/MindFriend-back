@@ -69,9 +69,7 @@ public class DiaryController {
             e.printStackTrace();
             return "오류가 발생했습니다";
         }
-
     }
-
 
     // 다이어리 단건 조회
     @GetMapping("/read")
@@ -130,5 +128,12 @@ public class DiaryController {
     public ResultResponse<GetMainEmo> getMainEmotion(@PathVariable Long diaryIdx) {
         GetMainEmo response = diaryService.getMainEmotion(diaryIdx);
         return new ResultResponse<>(GET_MAIN_EMOTION_SUCCEESS, response);
+    }
+
+    // chat gpt api
+    @PostMapping("/gpt/{diaryIdx}")
+    public ResultResponse<GetGptRes> gptChatbot(@PathVariable Long diaryIdx, @RequestBody postDiary request) {
+        GetGptRes response = diaryService.getChatbot(diaryIdx, request);
+        return new ResultResponse<>(GET_GPT_SUCCESS, response);
     }
 }

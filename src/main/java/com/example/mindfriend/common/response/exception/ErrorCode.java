@@ -31,6 +31,7 @@ public enum ErrorCode {
     DIARY_NOT_FOUND(404, "D003", "존재 하지 않는 다이어리입니다."),
     POST_DIARY_FAIL(400, "D004", "다이어리 작성에 실패했습니다."),
     POST_EMO_FAIL(400, "D005", "감정 추가에 실패했습니다."),
+    GET_GPT_FAIL(400, "D006", "chat GPT 통신에 실패했습니다.")
     ;
 
     private final int status;
