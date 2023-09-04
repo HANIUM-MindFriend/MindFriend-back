@@ -14,7 +14,7 @@ public class GetGptRes {
     public static GetGptRes of(Diary diary, String chatbot) {
         return GetGptRes.builder()
                 .diaryIdx(diary.getDiaryIdx())
-                .chatbot(chatbot)
+                .chatbot(chatbot.replaceAll("\"", "").trim())
                 .build();
     }
 }
