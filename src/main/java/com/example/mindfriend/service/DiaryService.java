@@ -10,6 +10,7 @@ import com.example.mindfriend.dto.request.postDiaryEmo;
 import com.example.mindfriend.dto.response.*;
 import com.example.mindfriend.repository.DiaryRepository;
 import com.example.mindfriend.repository.UserRepository;
+import io.github.flashvayne.chatgpt.service.ChatgptService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +42,7 @@ public class DiaryService {
     private final UserRepository userRepository;
     private final DiaryRepository diaryRepository;
     private final S3Uploader s3Uploader;
+    private final ChatgptService chatgptService;
 
     // 일기 작성
     @Transactional
@@ -229,5 +231,12 @@ public class DiaryService {
         Optional<Diary> diary = diaryRepository.findById(diaryIdx);
 
         return GetMainEmo.of(diary);
+    }
+
+    public GetGptRes getChatbot(Long diaryIdx, postDiary request) {
+        // chatGPT 에게 질문을 던지기
+        Diary diary = diaryRepository.getReferenceById(diaryIdx);
+        String response = chatgptService.sendMessage(request.getContent() + " 대화하는 듯한 어투를 사용해서 공감과 위로의 말을 한 문장으로 해줘. 문장은 20글자 이하여야돼. ");
+        return GetGptRes.of(diary, response);
     }
 }
