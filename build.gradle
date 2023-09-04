@@ -53,6 +53,10 @@ dependencies {
 
 	// s3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	// chat gpt
+	implementation 'io.github.flashvayne:chatgpt-spring-boot-starter:1.0.0'
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 }
 
 tasks.named('test') {
