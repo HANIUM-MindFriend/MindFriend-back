@@ -22,7 +22,9 @@ public enum ResultCode {
     GET_DIARYLIST_SUCESS(200, "D003", "일기 리스트를 조회하였습니다"),
     DELETE_DIARY_SUCCESS(200, "D004", "일기를 삭제하였습니다."),
     GET_MAIN_EMOTION_SUCCEESS(200, "D005", "메인 감정을 조회하였습니다."),
-    GET_GPT_SUCCESS(200, "D006", "챗봇 조회하였습니다.")
+    GET_GPT_SUCCESS(200, "D006", "챗봇 조회하였습니다."),
+    GET_DASHBOARD_SUCCESS(200, "D007", "개인일기 관리 대시보드를 조회하였습니다."),
+    GET_FEED_SUCCESS(200, "D008", "일 별 피드 조회하였습니다.")
     ;
     private final int status;
     private final String code;

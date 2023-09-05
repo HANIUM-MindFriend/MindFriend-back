@@ -78,31 +78,31 @@ public class Diary extends BaseEntity {
         switch (emotionType) {
             case 1:
                 this.angry++;
-                increasedColumn = "angry"; // angry 증가
+                increasedColumn = "분노"; // angry 증가
                 break;
             case 2:
                 this.disgust++;
-                increasedColumn = "disgust"; // disgust 증가
+                increasedColumn = "혐오"; // disgust 증가
                 break;
             case 3:
                 this.fear++;
-                increasedColumn = "fear"; // fear 증가
+                increasedColumn = "두려움"; // fear 증가
                 break;
             case 4:
                 this.happiness++;
-                increasedColumn = "happiness"; // happiness 증가
+                increasedColumn = "행복"; // happiness 증가
                 break;
             case 5:
                 this.neutral++;
-                increasedColumn = "neutral"; // neutral 증가
+                increasedColumn = "중립"; // neutral 증가
                 break;
             case 6:
                 this.sadness++;
-                increasedColumn = "sadness"; // sadness 증가
+                increasedColumn = "슬픔"; // sadness 증가
                 break;
             default:
                 this.surprise++;
-                increasedColumn = "surprise"; // surprise 증가
+                increasedColumn = "놀람"; // surprise 증가
                 break;
         }
         return increasedColumn; // 증가한 컬럼 이름 반환

@@ -8,6 +8,8 @@ import com.example.mindfriend.dto.request.postAiDiary;
 import com.example.mindfriend.dto.request.postDiary;
 import com.example.mindfriend.dto.request.postDiaryEmo;
 import com.example.mindfriend.dto.response.*;
+import com.example.mindfriend.dto.response.DashBoard.GetDashboard;
+import com.example.mindfriend.dto.response.FeedByDay.GetFeedByDay;
 import com.example.mindfriend.security.SecurityUtils;
 import com.example.mindfriend.service.DiaryService;
 import lombok.RequiredArgsConstructor;
@@ -135,5 +137,20 @@ public class DiaryController {
     public ResultResponse<GetGptRes> gptChatbot(@PathVariable Long diaryIdx, @RequestBody postDiary request) {
         GetGptRes response = diaryService.getChatbot(diaryIdx, request);
         return new ResultResponse<>(GET_GPT_SUCCESS, response);
+    }
+
+    // 개인일기 관리 대시보드 조회
+    @GetMapping("/dash")
+    public ResultResponse<GetDashboard> getDashBoard(@RequestParam String yearMonth) {
+        YearMonth parsedYearMonth = YearMonth.parse(yearMonth);
+        GetDashboard response = diaryService.getDashboard(SecurityUtils.getCurrentUserId(), parsedYearMonth);
+        return new ResultResponse<>(GET_DASHBOARD_SUCCESS, response);
+    }
+
+    // 일 별 피드 조회
+    @GetMapping("/feed/{diaryIdx}")
+    public ResultResponse<GetFeedByDay> getFeedByDay(@PathVariable Long diaryIdx) {
+        GetFeedByDay response = diaryService.getFeed(SecurityUtils.getCurrentUserId(), diaryIdx);
+        return new ResultResponse<>(GET_FEED_SUCCESS, response);
     }
 }
