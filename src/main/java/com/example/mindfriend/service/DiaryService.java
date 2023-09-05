@@ -9,6 +9,8 @@ import com.example.mindfriend.dto.request.postDiary;
 import com.example.mindfriend.dto.request.postDiaryEmo;
 import com.example.mindfriend.dto.response.*;
 import com.example.mindfriend.dto.response.DashBoard.GetDashboard;
+import com.example.mindfriend.dto.response.FeedByDay.GetFeedByDay;
+import com.example.mindfriend.dto.response.FeedByDay.GetMainEmoList;
 import com.example.mindfriend.repository.DiaryRepository;
 import com.example.mindfriend.repository.UserRepository;
 import io.github.flashvayne.chatgpt.service.ChatgptService;
@@ -29,10 +31,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 import static com.example.mindfriend.common.response.exception.ErrorCode.*;
 
@@ -262,5 +261,18 @@ public class DiaryService {
         }
         List<Diary> diary = diaryRepository.findByCreatedAtBetween(startDateTime, endDateTime);
         return GetDashboard.of(emotionArray, diary);
+    }
+
+    public GetFeedByDay getFeed(String userIdx, Long diaryIdx) {
+        User user = userRepository.findByUserId(userIdx)
+                .orElseThrow(UserNotFoundException::new);
+
+        List<Diary> mainEmotion = diaryRepository.findAllById(Collections.singleton(diaryIdx));
+
+        List<GetMainEmoList> mainEmoLists = GetMainEmoList.of(mainEmotion);
+        Diary diary = diaryRepository.getReferenceById(diaryIdx);
+
+        return new GetFeedByDay(diaryIdx, diary.getMainEmotion(), mainEmoLists);
+
     }
 }

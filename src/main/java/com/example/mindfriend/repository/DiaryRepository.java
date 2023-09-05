@@ -26,18 +26,18 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
     @Modifying(clearAutomatically = true)
     @Query("UPDATE Diary d SET d.mainEmotion = CASE" +
             "    WHEN d.angry >= d.disgust AND d.angry >= d.fear AND d.angry >= d.happiness " +
-            "    AND d.angry >= d.neutral AND d.angry >= d.sadness AND d.angry >= d.surprise THEN 'angry' " +
+            "    AND d.angry >= d.neutral AND d.angry >= d.sadness AND d.angry >= d.surprise THEN '분노' " +
             "    WHEN d.disgust >= d.angry AND d.disgust >= d.fear AND d.disgust >= d.happiness " +
-            "    AND d.disgust >= d.neutral AND d.disgust >= d.sadness AND d.disgust >= d.surprise THEN 'disgust' " +
+            "    AND d.disgust >= d.neutral AND d.disgust >= d.sadness AND d.disgust >= d.surprise THEN '혐오' " +
             "    WHEN d.fear >= d.angry AND d.fear >= d.disgust AND d.fear >= d.happiness " +
-            "    AND d.fear >= d.neutral AND d.fear >= d.sadness AND d.fear >= d.surprise THEN 'fear' " +
+            "    AND d.fear >= d.neutral AND d.fear >= d.sadness AND d.fear >= d.surprise THEN '두려움' " +
             "    WHEN d.happiness >= d.angry AND d.happiness >= d.disgust AND d.happiness >= d.fear " +
-            "    AND d.happiness >= d.neutral AND d.happiness >= d.sadness AND d.happiness >= d.surprise THEN 'happiness' " +
+            "    AND d.happiness >= d.neutral AND d.happiness >= d.sadness AND d.happiness >= d.surprise THEN '행복' " +
             "    WHEN d.neutral >= d.angry AND d.neutral >= d.disgust AND d.neutral >= d.fear " +
-            "    AND d.neutral >= d.happiness AND d.neutral >= d.sadness AND d.neutral >= d.surprise THEN 'neutral' " +
+            "    AND d.neutral >= d.happiness AND d.neutral >= d.sadness AND d.neutral >= d.surprise THEN '중립' " +
             "    WHEN d.sadness >= d.angry AND d.sadness >= d.disgust AND d.sadness >= d.fear " +
-            "    AND d.sadness >= d.happiness AND d.sadness >= d.neutral AND d.sadness >= d.surprise THEN 'sadness' " +
-            "    ELSE 'surprise' " +
+            "    AND d.sadness >= d.happiness AND d.sadness >= d.neutral AND d.sadness >= d.surprise THEN '슬픔' " +
+            "    ELSE '놀람' " +
             "END " +
             "WHERE d.diaryIdx = :diaryIdx")
     void updateMainEmotion(@Param("diaryIdx") Long diaryIdx);
@@ -48,5 +48,6 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
             "FROM Diary d " +
             "WHERE d.user = :user AND d.createdAt >= :startDate AND d.createdAt <= :endDate")
     List<Object[]> sumEmotionsByUserAndDate(@Param("user") User user, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+
 
 }
