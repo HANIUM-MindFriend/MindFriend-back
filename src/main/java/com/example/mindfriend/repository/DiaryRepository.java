@@ -41,4 +41,12 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
             "END " +
             "WHERE d.diaryIdx = :diaryIdx")
     void updateMainEmotion(@Param("diaryIdx") Long diaryIdx);
+
+    @Query(value = "SELECT SUM(d.angry), SUM(d.disgust), SUM(d.fear), " +
+            "SUM(d.happiness), SUM(d.neutral)," +
+            "SUM(d.sadness), SUM(d.surprise) " +
+            "FROM Diary d " +
+            "WHERE d.user = :user AND d.createdAt >= :startDate AND d.createdAt <= :endDate")
+    List<Object[]> sumEmotionsByUserAndDate(@Param("user") User user, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+
 }
