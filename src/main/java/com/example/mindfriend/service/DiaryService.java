@@ -8,6 +8,7 @@ import com.example.mindfriend.dto.request.postAiDiary;
 import com.example.mindfriend.dto.request.postDiary;
 import com.example.mindfriend.dto.request.postDiaryEmo;
 import com.example.mindfriend.dto.response.*;
+import com.example.mindfriend.dto.response.DashBoard.GetDashboard;
 import com.example.mindfriend.repository.DiaryRepository;
 import com.example.mindfriend.repository.UserRepository;
 import io.github.flashvayne.chatgpt.service.ChatgptService;
@@ -238,5 +239,28 @@ public class DiaryService {
         Diary diary = diaryRepository.getReferenceById(diaryIdx);
         String response = chatgptService.sendMessage(request.getContent() + " 대화하는 듯한 어투를 사용해서 공감과 위로의 말을 한 문장으로 해줘. 문장은 20글자 이하여야돼. ");
         return GetGptRes.of(diary, response);
+    }
+
+    public GetDashboard getDashboard(String userIdx, YearMonth yearMonth) {
+
+        LocalDate startDate = yearMonth.atDay(1);
+        LocalDate endDate = yearMonth.atEndOfMonth();
+
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
+
+        User user = userRepository.findByUserId(userIdx)
+                .orElseThrow(UserNotFoundException::new);
+
+        List<Object[]> emoGraph = diaryRepository.sumEmotionsByUserAndDate(user, startDateTime, endDateTime);
+
+        int[] emotionArray = new int[7];
+        for (Object[] row : emoGraph) {
+            for (int i = 0; i<row.length; i++) {
+                emotionArray[i] += ((Number) row[i]).intValue();
+            }
+        }
+        List<Diary> diary = diaryRepository.findByCreatedAtBetween(startDateTime, endDateTime);
+        return GetDashboard.of(emotionArray, diary);
     }
 }
