@@ -35,7 +35,7 @@ public class AuthService {
     private final S3Uploader s3Uploader;
 
     // 회원가입
-    public getUser signUp(signUp request, MultipartFile profileImg) throws IOException {
+    public GetUser signUp(signUp request, MultipartFile profileImg) throws IOException {
 
         if (userRepository.existsByUserEmail(request.getUserEmail())) {
             throw new MindFriendBusinessException(EMAIL_ALREADY_EXIST);
@@ -49,7 +49,7 @@ public class AuthService {
         User user = request.toEntity(passwordEncoder, userProfileImg);
         userRepository.save(user);
 
-        return getUser.of(user);
+        return GetUser.of(user);
     }
 
     // 로그인

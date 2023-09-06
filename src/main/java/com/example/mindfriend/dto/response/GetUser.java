@@ -8,15 +8,15 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @Builder
-public class getUser {
+public class GetUser {
     private Long userIdx;
     private String userId;
     private String userNickname;
     private String userEmail;
     private String userProfileImg;
 
-    public static getUser of(User user) {
-        return getUser.builder()
+    public static GetUser of(User user) {
+        return GetUser.builder()
                 .userIdx(user.getUserIdx())
                 .userId(user.getUserId())
                 .userNickname(user.getUserNickname())

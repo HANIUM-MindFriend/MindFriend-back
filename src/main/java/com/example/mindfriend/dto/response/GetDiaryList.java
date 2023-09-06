@@ -11,13 +11,13 @@ import java.util.stream.Collectors;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @Builder
-public class getDiaryList {
+public class GetDiaryList {
     private Long diaryIdx;
     private LocalDateTime date;
 
-    public static List<getDiaryList> of(List<Diary> diaries) {
+    public static List<GetDiaryList> of(List<Diary> diaries) {
         return diaries.stream()
-                .map(diary -> getDiaryList.builder()
+                .map(diary -> GetDiaryList.builder()
                         .diaryIdx(diary.getDiaryIdx())
                         .date(diary.getCreatedAt())
                         .build())

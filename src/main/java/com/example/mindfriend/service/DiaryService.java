@@ -48,7 +48,7 @@ public class DiaryService {
 
     // 일기 작성
     @Transactional
-    public getDiary postDiary(String userId, postDiary request, MultipartFile postImg) throws IOException, InterruptedException {
+    public GetDiary postDiary(String userId, postDiary request, MultipartFile postImg) throws IOException, InterruptedException {
 
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(UserNotFoundException::new);
@@ -98,7 +98,7 @@ public class DiaryService {
             if (response == null) {
                 throw new MindFriendBusinessException(POST_DIARY_FAIL);
             }
-            return getDiary.of(response);
+            return GetDiary.of(response);
         }
         throw new MindFriendBusinessException(POST_DIARY_FAIL);
     }
@@ -111,7 +111,7 @@ public class DiaryService {
     }
 
     // 일기 단건 조회
-    public getDiaryDetail getDiaryDetail(String userId, String dateString) {
+    public GetDiaryDetail getDiaryDetail(String userId, String dateString) {
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(UserNotFoundException::new);
 
@@ -131,11 +131,11 @@ public class DiaryService {
         // 예: 첫 번째 일기를 선택한다고 가정
         Diary diary = diaryList.get(0);
 
-        return getDiaryDetail.of(diary);
+        return GetDiaryDetail.of(diary);
     }
 
     // 일기 감정 수정(추가)
-    public getDiaryDetail addEmotionToDiary(postDiaryEmo request) {
+    public GetDiaryDetail addEmotionToDiary(postDiaryEmo request) {
         Diary diary = diaryRepository.findById(request.getDiaryIdx())
                 .orElseThrow(() -> new MindFriendBusinessException(DIARY_NOT_FOUND));
 
@@ -146,7 +146,7 @@ public class DiaryService {
         if (response == null) {
             throw new MindFriendBusinessException(POST_EMO_FAIL);
         }
-        return getDiaryDetail.of(response);
+        return GetDiaryDetail.of(response);
     }
 
     // 여러 일기 삭제
@@ -166,31 +166,31 @@ public class DiaryService {
         return deletedDiarys;
     }
 
-    public List<getDiaryList> getDiaryForEmo(YearMonth yearMonth, Long emotion) {
+    public List<GetDiaryList> getDiaryForEmo(YearMonth yearMonth, Long emotion) {
         LocalDateTime startDateTime = yearMonth.atDay(1).atStartOfDay();
         LocalDateTime endDateTime = yearMonth.atEndOfMonth().atTime(23, 59, 59);
 
         List<Diary> diaries = diaryRepository.findByCreatedAtBetweenAndMainEmotion(startDateTime, endDateTime, emotion);
 
-        return getDiaryList.of(diaries);
+        return GetDiaryList.of(diaries);
     }
 
-    public List<getDiaryList> getDiaryForKeyword(YearMonth yearMonth, String keyword) {
+    public List<GetDiaryList> getDiaryForKeyword(YearMonth yearMonth, String keyword) {
         LocalDateTime startDateTime = yearMonth.atDay(1).atStartOfDay();
         LocalDateTime endDateTime = yearMonth.atEndOfMonth().atTime(23, 59, 59);
 
         List<Diary> diaries = diaryRepository.findByCreatedAtBetweenAndContentContaining(startDateTime, endDateTime, keyword);
 
-        return getDiaryList.of(diaries);
+        return GetDiaryList.of(diaries);
     }
 
-    public List<getDiaryList> getDiaryForDate(YearMonth yearMonth) {
+    public List<GetDiaryList> getDiaryForDate(YearMonth yearMonth) {
         LocalDateTime startDateTime = yearMonth.atDay(1).atStartOfDay();
         LocalDateTime endDateTime = yearMonth.atEndOfMonth().atTime(23, 59, 59);
 
         List<Diary> diaries = diaryRepository.findByCreatedAtBetween(startDateTime, endDateTime);
 
-        return getDiaryList.of(diaries);
+        return GetDiaryList.of(diaries);
     }
 
     public GetContentEmo postAiDiary(String userIdx, postAiDiary request) {

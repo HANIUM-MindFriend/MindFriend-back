@@ -35,8 +35,8 @@ public class DiaryController {
 
     // 일기 작성
     @PostMapping("/write")
-    public ResultResponse<getDiary> postDiary(@RequestPart(value = "postDiary") postDiary request, @RequestPart(value = "postImg") MultipartFile postImg) throws IOException, InterruptedException {
-        getDiary response = diaryService.postDiary(securityUtils.getCurrentUserId(), request, postImg);
+    public ResultResponse<GetDiary> postDiary(@RequestPart(value = "postDiary") postDiary request, @RequestPart(value = "postImg") MultipartFile postImg) throws IOException, InterruptedException {
+        GetDiary response = diaryService.postDiary(securityUtils.getCurrentUserId(), request, postImg);
         return new ResultResponse<>(ResultCode.POST_DIARY_SUCCESS, response);
     }
 
@@ -75,15 +75,15 @@ public class DiaryController {
 
     // 다이어리 단건 조회
     @GetMapping("/read")
-    public ResultResponse<getDiaryDetail> getDiaryDetail(@RequestParam String date) {
-        getDiaryDetail response = diaryService.getDiaryDetail(securityUtils.getCurrentUserId(), date);
+    public ResultResponse<GetDiaryDetail> getDiaryDetail(@RequestParam String date) {
+        GetDiaryDetail response = diaryService.getDiaryDetail(securityUtils.getCurrentUserId(), date);
         return new ResultResponse<>(GET_DIARY_SUCCESS, response);
     }
 
     // 다이어리 감정 추가
     @PostMapping("/emo")
-    public ResultResponse<getDiaryDetail> addEmotionToDiary(@RequestBody postDiaryEmo request) {
-        getDiaryDetail response = diaryService.addEmotionToDiary(request);
+    public ResultResponse<GetDiaryDetail> addEmotionToDiary(@RequestBody postDiaryEmo request) {
+        GetDiaryDetail response = diaryService.addEmotionToDiary(request);
         return new ResultResponse<>(GET_DIARY_SUCCESS, response);
     }
 
@@ -96,25 +96,25 @@ public class DiaryController {
 
     // 감정 별 일기 검색(조회)
     @GetMapping("/emotion/{emotion}")
-    public ResultResponse<List<getDiaryList>> angryDiary(@PathVariable Long emotion, @RequestParam String yearMonth) {
+    public ResultResponse<List<GetDiaryList>> angryDiary(@PathVariable Long emotion, @RequestParam String yearMonth) {
         YearMonth parsedYearMonth = YearMonth.parse(yearMonth);
-        List<getDiaryList> response = diaryService.getDiaryForEmo(parsedYearMonth, emotion);
+        List<GetDiaryList> response = diaryService.getDiaryForEmo(parsedYearMonth, emotion);
         return new ResultResponse<>(GET_DIARYLIST_SUCESS, response);
     }
 
     // 키워드 별 일기 검색(조회)
     @GetMapping("/keyword/search")
-    public ResultResponse<List<getDiaryList>> searchForKeyword(@RequestParam String keyword, @RequestParam String yearMonth) {
+    public ResultResponse<List<GetDiaryList>> searchForKeyword(@RequestParam String keyword, @RequestParam String yearMonth) {
         YearMonth parsedYearMonth = YearMonth.parse(yearMonth);
-        List<getDiaryList> response = diaryService.getDiaryForKeyword(parsedYearMonth, keyword);
+        List<GetDiaryList> response = diaryService.getDiaryForKeyword(parsedYearMonth, keyword);
         return new ResultResponse<>(GET_DIARYLIST_SUCESS, response);
     }
 
     // 날짜 별 일기 검색(조회)
     @GetMapping("/date/search")
-    public ResultResponse<List<getDiaryList>> searchForDate(@RequestParam String yearMonth) {
+    public ResultResponse<List<GetDiaryList>> searchForDate(@RequestParam String yearMonth) {
         YearMonth parsedYearMonth = YearMonth.parse(yearMonth);
-        List<getDiaryList> response = diaryService.getDiaryForDate(parsedYearMonth);
+        List<GetDiaryList> response = diaryService.getDiaryForDate(parsedYearMonth);
         return new ResultResponse<>(GET_DIARYLIST_SUCESS, response);
     }
 
