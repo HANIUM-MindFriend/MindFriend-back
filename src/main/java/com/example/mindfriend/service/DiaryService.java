@@ -278,7 +278,13 @@ public class DiaryService {
         List<GetMainEmoList> mainEmoLists = GetMainEmoList.of(mainEmotion);
         Diary diary = diaryRepository.getReferenceById(diaryIdx);
 
-        return new GetFeedByDay(diaryIdx, diary.getMainEmotion(), mainEmoLists);
+        LocalDateTime createdAt = diary.getCreatedAt();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+        String formattedDate = createdAt.format(formatter);
 
+        log.info("사용자 [" + user.getUserEmail() + "] 의 피드 조회");
+        log.info("사용자 [" + user.getUserEmail() + "] " + formattedDate + "월의 주요 감정은 [" + diary.getMainEmotion() + "]");
+
+        return new GetFeedByDay(diaryIdx, diary.getMainEmotion(), mainEmoLists);
     }
 }
