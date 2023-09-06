@@ -211,7 +211,8 @@ public class DiaryService {
         Diary existingDiary = diaryRepository.findDiariesCreatedToday(user, today);
 
         String chatbot = chatgptService.sendMessage(request.getContent() + " 대화하는 듯한 어투를 사용해서 공감과 위로의 말을 한 문장으로 해줘. 문장은 20글자 이하여야돼. ");
-        log.info(chatbot);
+        log.info("사용자 [" + user.getUserEmail() + "] " + request.getContent());
+        log.info("사용자 [" + user.getUserEmail() + "] 챗봇 답변: " + chatbot );
 
         // 기존에 작성한 일기가 없다면
         if (existingDiary == null) {
