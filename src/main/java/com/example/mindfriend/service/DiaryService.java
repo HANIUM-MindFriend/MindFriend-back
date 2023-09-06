@@ -15,6 +15,7 @@ import com.example.mindfriend.repository.DiaryRepository;
 import com.example.mindfriend.repository.UserRepository;
 import io.github.flashvayne.chatgpt.service.ChatgptService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,6 +37,7 @@ import java.util.*;
 import static com.example.mindfriend.common.response.exception.ErrorCode.*;
 
 @Service
+@Slf4j
 @Transactional
 @RequiredArgsConstructor
 public class DiaryService {
@@ -207,6 +209,9 @@ public class DiaryService {
 
         LocalDateTime today = LocalDateTime.now();
         Diary existingDiary = diaryRepository.findDiariesCreatedToday(user, today);
+
+        String chatbot = chatgptService.sendMessage(request.getContent() + " 대화하는 듯한 어투를 사용해서 공감과 위로의 말을 한 문장으로 해줘. 문장은 20글자 이하여야돼. ");
+        log.info(chatbot);
 
         // 기존에 작성한 일기가 없다면
         if (existingDiary == null) {
