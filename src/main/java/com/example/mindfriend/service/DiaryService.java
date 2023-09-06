@@ -266,6 +266,9 @@ public class DiaryService {
             }
         }
         List<Diary> diary = diaryRepository.findByCreatedAtBetween(startDateTime, endDateTime);
+
+        log.info("사용자 [" + user.getUserEmail() + "] 의 개인일기 관리 대시보드 조회");
+
         return GetDashboard.of(emotionArray, diary);
     }
 
