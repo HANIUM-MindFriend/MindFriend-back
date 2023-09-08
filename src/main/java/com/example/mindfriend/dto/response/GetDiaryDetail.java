@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor
 @Builder
-public class getDiaryDetail {
+public class GetDiaryDetail {
     private String profileImg;
     private Long diaryIdx;
     private String title;
@@ -18,8 +18,8 @@ public class getDiaryDetail {
     private String image;
     private String emotion;
 
-    public static getDiaryDetail of(Diary diary) {
-        return getDiaryDetail.builder()
+    public static GetDiaryDetail of(Diary diary) {
+        return GetDiaryDetail.builder()
                 .profileImg(diary.getUser().getUserProfileImg())
                 .diaryIdx(diary.getDiaryIdx())
                 .title(diary.getTitle())

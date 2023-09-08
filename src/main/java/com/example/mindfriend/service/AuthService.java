@@ -9,6 +9,7 @@ import com.example.mindfriend.repository.UserRepository;
 import com.example.mindfriend.security.JwtTokenProvider;
 import com.example.mindfriend.security.TokenInfo;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -23,6 +24,7 @@ import java.util.Optional;
 import static com.example.mindfriend.common.response.exception.ErrorCode.*;
 
 @Service
+@Slf4j
 @Transactional
 @RequiredArgsConstructor
 public class AuthService {
@@ -33,7 +35,7 @@ public class AuthService {
     private final S3Uploader s3Uploader;
 
     // 회원가입
-    public getUser signUp(signUp request, MultipartFile profileImg) throws IOException {
+    public GetUser signUp(signUp request, MultipartFile profileImg) throws IOException {
 
         if (userRepository.existsByUserEmail(request.getUserEmail())) {
             throw new MindFriendBusinessException(EMAIL_ALREADY_EXIST);
@@ -47,7 +49,7 @@ public class AuthService {
         User user = request.toEntity(passwordEncoder, userProfileImg);
         userRepository.save(user);
 
-        return getUser.of(user);
+        return GetUser.of(user);
     }
 
     // 로그인
@@ -65,6 +67,8 @@ public class AuthService {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         Optional<User> user = userRepository.findByUserId(request.getUserId());
+        log.info("사용자 [" + user.get().getUserEmail() + "] 로그인 성공");
+        log.info("사용자 [" + user.get().getUserEmail() + "] " + user.get().getAuthorities() + " 권한을 가지고 있습니다.");
 
         // 3. 인증 정보를 기반으로 JWT 토큰 생성
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication, user.get().getUserIdx());
