@@ -1,8 +1,9 @@
 package com.example.mindfriend.dto.response.DashBoard;
+
 import com.example.mindfriend.domain.Diary;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,14 +13,14 @@ import java.util.stream.Collectors;
 @Builder
 public class GetColorByMonth {
     private Long diaryIdx;
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
     private String mainEmotion;
 
     public static List<GetColorByMonth> of(List<Diary> diaries) {
         return diaries.stream()
                 .map(diary -> GetColorByMonth.builder()
                         .diaryIdx(diary.getDiaryIdx())
-                        .createdAt(diary.getCreatedAt())
+                        .createdAt(diary.getCreatedAt().toLocalDate())
                         .mainEmotion(diary.getMainEmotion())
                         .build())
                 .collect(Collectors.toList());
