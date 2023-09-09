@@ -7,10 +7,10 @@ import com.example.mindfriend.domain.User;
 import com.example.mindfriend.dto.request.postAiDiary;
 import com.example.mindfriend.dto.request.postDiary;
 import com.example.mindfriend.dto.request.postDiaryEmo;
-import com.example.mindfriend.dto.response.*;
 import com.example.mindfriend.dto.response.DashBoard.GetDashboard;
 import com.example.mindfriend.dto.response.FeedByDay.GetFeedByDay;
 import com.example.mindfriend.dto.response.FeedByDay.GetMainEmoList;
+import com.example.mindfriend.dto.response.*;
 import com.example.mindfriend.repository.DiaryRepository;
 import com.example.mindfriend.repository.UserRepository;
 import io.github.flashvayne.chatgpt.service.ChatgptService;
@@ -22,15 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
-import java.time.LocalDate;
-
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.YearMonth;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -233,11 +227,27 @@ public class DiaryService {
         }
     }
 
-    public GetMainEmo getMainEmotion(Long diaryIdx) {
-        Optional<Diary> diary = diaryRepository.findById(diaryIdx);
+    public GetMainEmo getMainEmotion(String userIdx, Date date) {
+        LocalDateTime startDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atStartOfDay();
+        LocalDateTime endDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().atTime(LocalTime.MAX);
 
-        return GetMainEmo.of(diary);
+        User user = userRepository.findByUserId(userIdx)
+                .orElseThrow(UserNotFoundException::new);
+
+        List<Diary> diaryList = diaryRepository.findByUserAndCreatedAtBetween(user, startDateTime, endDateTime);
+
+        if (!diaryList.isEmpty()) {
+            Diary firstDiary = diaryList.get(0);
+            return GetMainEmo.of(Optional.of(firstDiary));
+        } else {
+            // 일기가 없을 경우에 대한 처리를 수행할 수 있습니다.
+            throw new MindFriendBusinessException(DIARY_NOT_FOUND);
+        }
     }
+
+
+
+
 
     public GetGptRes getChatbot(Long diaryIdx, postDiary request) {
         // chatGPT 에게 질문을 던지기

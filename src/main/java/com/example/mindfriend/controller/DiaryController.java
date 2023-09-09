@@ -1,5 +1,6 @@
 package com.example.mindfriend.controller;
 
+import com.example.mindfriend.common.response.exception.MindFriendBusinessException;
 import com.example.mindfriend.common.response.result.ResultCode;
 import com.example.mindfriend.common.response.result.ResultResponse;
 import com.example.mindfriend.domain.Diary;
@@ -7,9 +8,9 @@ import com.example.mindfriend.dto.request.PredictionRequest;
 import com.example.mindfriend.dto.request.postAiDiary;
 import com.example.mindfriend.dto.request.postDiary;
 import com.example.mindfriend.dto.request.postDiaryEmo;
-import com.example.mindfriend.dto.response.*;
 import com.example.mindfriend.dto.response.DashBoard.GetDashboard;
 import com.example.mindfriend.dto.response.FeedByDay.GetFeedByDay;
+import com.example.mindfriend.dto.response.*;
 import com.example.mindfriend.security.SecurityUtils;
 import com.example.mindfriend.service.DiaryService;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.YearMonth;
+import java.util.Date;
 import java.util.List;
 
+import static com.example.mindfriend.common.response.exception.ErrorCode.DIARY_NOT_FOUND;
 import static com.example.mindfriend.common.response.result.ResultCode.*;
 
 @RestController
@@ -126,10 +131,18 @@ public class DiaryController {
     }
 
     // 다이어리 메인 감정 반환
-    @GetMapping("/main/{diaryIdx}")
-    public ResultResponse<GetMainEmo> getMainEmotion(@PathVariable Long diaryIdx) {
-        GetMainEmo response = diaryService.getMainEmotion(diaryIdx);
-        return new ResultResponse<>(GET_MAIN_EMOTION_SUCCEESS, response);
+    @GetMapping("/main")
+    public ResultResponse<GetMainEmo> getMainEmotion(@RequestParam String date) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date parsedDate = dateFormat.parse(date); // 문자열을 Date로 파싱
+
+            GetMainEmo response = diaryService.getMainEmotion(securityUtils.getCurrentUserId(), parsedDate);
+            return new ResultResponse<>(GET_MAIN_EMOTION_SUCCEESS, response);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            throw  new MindFriendBusinessException(DIARY_NOT_FOUND);
+        }
     }
 
     // chat gpt api
