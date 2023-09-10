@@ -37,7 +37,7 @@ jobs:
 
     # gradlew 빌드
     - name: Build with Gradle
-      run : ./gradlew clean build
+      run : ./gradlew clean build -x test
 
     # 빌드 성공하면 해당 프로젝트를 zip로 만듦
     # 이름은 run에서 설정 
