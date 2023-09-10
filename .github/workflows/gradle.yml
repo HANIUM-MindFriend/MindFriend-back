@@ -25,9 +25,11 @@ jobs:
 
     - uses : actions/checkout@v3
 
-    - run : touch ./src/main/resources/application.yml
-    - run : echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application.yml
-    - run : cat ./src/main/resources/application.yml
+    - name: Set YML
+      run: |
+        mkdir -p src/main/resources
+        echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
+        find src
 
     # gradlew에 권한 부여
     - name : Grant execute permission for gradlew
