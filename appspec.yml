@@ -2,14 +2,14 @@ version: 0.0
 os: linux
 files:
   - sources: /
-    destination: /home/ec2-user/app/deploy
+    destination: /home/ubuntu/app/deploy
 
 hooks:
   AfterInstall:
     - location: scripts/stop.sh
       timeout: 60
-      runas: ec2-user
+      runas: ubuntu
   ApplicationStart:
     - location: scripts/start.sh
       timeout: 60
-      runas: ec2-user
+      runas: ubuntu
