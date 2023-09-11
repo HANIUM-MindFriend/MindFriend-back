@@ -1,8 +1,16 @@
 version: 0.0
 os: linux
+
 files:
   - sources: /
     destination: /home/ubuntu/app/deploy
+    overwrite: yes
+
+permissions:
+  - object: /
+    pattern: "**"
+    owner: ubuntu
+    group: ubuntu
 
 hooks:
   AfterInstall:
