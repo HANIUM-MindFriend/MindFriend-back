@@ -1,5 +1,5 @@
 version: 0.0
-os: linx
+os: linux
 files:
   - sources: /
     destination: /home/ec2-user/app/deploy
