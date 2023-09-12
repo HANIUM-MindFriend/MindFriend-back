@@ -3,9 +3,9 @@ name: Java CI with Gradle
 # main 브랜치의 push와 pull로 CI가 작동
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "develop" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "develop" ]
 
 permissions:
   contents: read
