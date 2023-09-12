@@ -21,9 +21,10 @@ public class TestService {
         String content = request.getContent(); // 요청에서 content 값 가져옴
 
         // 모델 실행에 content 값을 전달하고 결과를 얻어오는 작업 수행
-        String modelResult = runModelWithContent(content);
+        //String modelResult = runModelWithContent(content);
 
         String command = "sh /home/ubuntu/app/deploy/src/main/java/com/example/mindfriend/script/run_python_script.sh";
+        String modelExecutionResult = null;
         try {
             Process process = Runtime.getRuntime().exec(command);
             int exitCode = process.waitFor();
@@ -37,13 +38,13 @@ public class TestService {
                     output.append(line).append("\n");
                 }
             }
-            String modelExecutionResult = output.toString().trim();
+            modelExecutionResult = output.toString().trim();
             System.out.println(modelExecutionResult);
         } catch (IOException | InterruptedException e) {
             // Handle exceptions here
             e.printStackTrace();
         }
-        return content;
+        return modelExecutionResult;
     }
 
     private String runModelWithContent(String content) {
