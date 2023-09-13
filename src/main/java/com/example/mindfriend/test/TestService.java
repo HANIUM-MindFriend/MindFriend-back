@@ -45,12 +45,11 @@ public class TestService {
                     log.info("출력 스트임에서 한 줄씩 읽어와 output 변수에 추가");
                 }
             }
+
             modelExecutionResult = output.toString().trim();
             log.info("결과를 콘솔에 출력하고 로깅 " + modelExecutionResult);
-            System.out.println(modelExecutionResult);
-            log.info(modelExecutionResult);
-
             return modelExecutionResult;
+
         } catch (IOException | InterruptedException e) {
             // Handle exceptions here
             e.printStackTrace();
