@@ -20,10 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -54,31 +51,20 @@ public class DiaryService {
 
         Diary existingDiary = diaryRepository.findDiariesCreatedToday(user, today);
 
-//        if (existingDiary != null) {
+        if (existingDiary != null) {
 
-            // 이미 오늘 일기가 존재한다면 내용을 추가
-//            existingDiary.setTitle(request.getTitle());
-//            existingDiary.setContent(request.getContent());
-//            existingDiary.setImage(userPostImg);
-//
-//            Diary response = diaryRepository.save(existingDiary);
-//            if (response == null) {
-//                throw new MindFriendBusinessException(POST_DIARY_FAIL);
-//            }
+             //이미 오늘 일기가 존재한다면 내용을 추가
+            existingDiary.setTitle(request.getTitle());
+            existingDiary.setContent(request.getContent());
+            existingDiary.setImage(userPostImg);
 
-            Long TestId = 8L;
-            Diary TestRes = diaryRepository.getReferenceById(TestId);
-
-            log.info("사용자 [" + user.getUserEmail() + "]의 일기 작성");
-            log.info("사용자 [" + user.getUserEmail() + "]의 오늘의 일기 제목: " + request.getTitle());
-            log.info("사용자 [" + user.getUserEmail() + "]의 오늘의 일기: " + request.getContent());
-            log.info("사용자 [" + user.getUserEmail() + "]의 " + today + " 의 일기 감정 리스트:  " +
-                    "화남 -> " + TestRes.getAngry() + " 혐오 -> " + TestRes.getDisgust() + " 두려움 -> " + TestRes.getFear() + " 행복 -> " + TestRes.getHappiness() +
-                    " 중립 -> " + TestRes.getNeutral() + " 슬픔 -> " + TestRes.getSadness() + " 놀라움 -> " + TestRes.getSurprise());
-
-            return GetDiary.of(TestRes);
-//        }
-//        throw new MindFriendBusinessException(POST_DIARY_FAIL);
+            Diary response = diaryRepository.save(existingDiary);
+            if (response == null) {
+                throw new MindFriendBusinessException(POST_DIARY_FAIL);
+            }
+            return GetDiary.of(response);
+        }
+        throw new MindFriendBusinessException(POST_DIARY_FAIL);
     }
 
     // 일기 단건 조회
@@ -181,10 +167,6 @@ public class DiaryService {
         LocalDateTime today = LocalDateTime.now();
         Diary existingDiary = diaryRepository.findDiariesCreatedToday(user, today);
 
-        String chatbot = chatgptService.sendMessage(request.getContent() + " 대화하는 듯한 어투를 사용해서 공감과 위로의 말을 한 문장으로 해줘. 문장은 20글자 이하여야돼. ");
-        log.info("사용자 [" + user.getUserEmail() + "] " + request.getContent());
-        log.info("사용자 [" + user.getUserEmail() + "] 챗봇 답변: " + chatbot );
-
         // 기존에 작성한 일기가 없다면
         if (existingDiary == null) {
             Diary diary = new Diary();
@@ -222,10 +204,6 @@ public class DiaryService {
         }
     }
 
-
-
-
-
     public GetGptRes getChatbot(Long diaryIdx, postDiary request) {
         // chatGPT 에게 질문을 던지기
         Diary diary = diaryRepository.getReferenceById(diaryIdx);
@@ -254,7 +232,6 @@ public class DiaryService {
         }
         List<Diary> diary = diaryRepository.findByCreatedAtBetween(startDateTime, endDateTime);
 
-        log.info("사용자 [" + user.getUserEmail() + "] 의 개인일기 관리 대시보드 조회");
 
         return GetDashboard.of(emotionArray, diary);
     }
@@ -267,13 +244,6 @@ public class DiaryService {
 
         List<GetMainEmoList> mainEmoLists = GetMainEmoList.of(mainEmotion);
         Diary diary = diaryRepository.getReferenceById(diaryIdx);
-
-        LocalDateTime createdAt = diary.getCreatedAt();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
-        String formattedDate = createdAt.format(formatter);
-
-        log.info("사용자 [" + user.getUserEmail() + "] 의 피드 조회");
-        log.info("사용자 [" + user.getUserEmail() + "] " + formattedDate + "월의 주요 감정은 [" + diary.getMainEmotion() + "]");
 
         return new GetFeedByDay(diaryIdx, diary.getMainEmotion(), mainEmoLists);
     }
