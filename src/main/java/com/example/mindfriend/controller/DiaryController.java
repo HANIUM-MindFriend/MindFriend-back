@@ -45,39 +45,6 @@ public class DiaryController {
         return new ResultResponse<>(ResultCode.POST_DIARY_SUCCESS, response);
     }
 
-    @PostMapping("/predict")
-    public String predict(@RequestBody PredictionRequest request) {
-        String sentence = request.getSentence();
-        String pythonInterpreterPath = "/Library/Frameworks/Python.framework/Versions/3.7/bin/python3"; // Python 인터프리터 경로 설정
-        String pythonScriptPath = "/Users/songjuhee/Desktop/Model/main.py"; // Python 스크립트 경로 설정
-
-        try {
-            ProcessBuilder processBuilder = new ProcessBuilder(pythonInterpreterPath, pythonScriptPath, sentence);
-            processBuilder.redirectErrorStream(true);
-
-            Process process = processBuilder.start();
-            System.out.println("파이참 실행 성공");
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-
-            String output;
-            StringBuilder result = new StringBuilder();
-            while ((output = reader.readLine()) != null) {
-                result.append(output).append("\n");
-            }
-
-            int exitCode = process.waitFor();
-            if (exitCode == 0) {
-                return result.toString();
-            } else {
-                return "오류가 발생했습니다";
-            }
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-            return "오류가 발생했습니다";
-        }
-    }
-
     // 다이어리 단건 조회
     @GetMapping("/read")
     public ResultResponse<GetDiaryDetail> getDiaryDetail(@RequestParam String date) {
