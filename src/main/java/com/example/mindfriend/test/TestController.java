@@ -1,7 +1,5 @@
 package com.example.mindfriend.test;
 
-import com.example.mindfriend.common.response.result.ResultResponse;
-import com.example.mindfriend.dto.request.PredictionRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -22,5 +20,4 @@ public class TestController {
         String result = testService.predict(request);
         return ResponseEntity.ok(result);
     }
-
 }
